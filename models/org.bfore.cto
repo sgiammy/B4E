@@ -65,7 +65,7 @@ concept Address {
 abstract participant Business identified by email {
   o String name
   o String email
-  o Address address
+  o Address address optional
   o Double educoinBalance
 }
 
@@ -104,25 +104,6 @@ participant Campaign extends Business {
   -->  Mentor[] mentors optional
   -->  Activity[] activities optional
 }
-
-abstract transaction AddParticipant{
-  o String name
-  o String email
-  o Address address
-  o Double educoinBalance
-}
-
-transaction AddCampaign extends AddParticipant{
-  -->  Student[] students optional
-  -->  Mentor[] mentors optional
-  -->  Activity[] activities optional
-}
-
-
-transaction AddStudent extends AddParticipant{
-  -->Campaign[] campaigns optional
-}
-
 
 /**
 A donor can give Educoin to a campaign (funding) 

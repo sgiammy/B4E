@@ -3,7 +3,7 @@
     "composer": "^0.19.15"
   },
   "name": "b4e-network",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Blockchain 4 Education PoC",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/b4e-network.bna",
