@@ -1,0 +1,6 @@
+query Q1 {
+  description: "Given student and activity return the Activity Contract (if any)"
+  statement: 
+    SELECT org.bfore.ActivityContract
+      WHERE(_$activity == activity AND _$student == student)
+}

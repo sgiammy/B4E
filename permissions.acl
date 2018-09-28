@@ -1,13 +1,129 @@
 /*
 * Sample access control list.
  */
-rule Default {
-    description: "Allow all participants access to all resources"
-    participant: "ANY"
-    operation: ALL
-    resource: "org.bfore.*"
-    action: ALLOW
+
+/**
+* LET'S START WITH STUDENT ACCESS CONTROL 
+*/
+rule student_R1 {
+  description: "Students can read their record only"
+  participant(p): "org.bfore.Student"
+  operation: READ
+  resource(r): "org.bfore.Student"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
 }
+
+rule student_R2 {
+  description: "Students can only read their ActivityContract"
+  participant(p): "org.bfore.Student"
+  operation: CREATE, READ
+  resource(r): "org.bfore.ActivityContract"
+  condition: (p.getIdentifier() == r.student.getIdentifier())
+  action: ALLOW
+}
+
+// The update is needed to update the currentStudents field in Activity
+rule student_R3 {
+  description: "Students can read all the activities"
+  participant: "org.bfore.Student"
+  operation: READ, UPDATE
+  resource: "org.bfore.Activity"
+  action: ALLOW
+}
+
+rule student_R4{
+  description: "Students can make the transaction enroll to activity"
+  participant: "org.bfore.Student"
+  operation: CREATE
+  resource: "org.bfore.EnrollStudentToActivity"
+  action: ALLOW
+}
+
+// Without this Student cannot do the transaction EnrollStudentToActivity
+rule student_R5{
+  description: "Students can read campaign"
+  participant: "org.bfore.Student"
+  operation: READ 
+  resource: "org.bfore.Campaign"
+  action: ALLOW 
+}
+
+/**
+* CAMPAIGN'S RULES 
+*/
+rule campaign_R1 {
+  description: "Campaigns can read only their record"
+  participant(p): "org.bfore.Campaign"
+  operation: READ, UPDATE
+  resource(r): "org.bfore.Campaign"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule campaign_R2 {
+  description: "Campaigns can create and read all the activities"
+  participant: "org.bfore.Campaign"
+  operation: CREATE, READ
+  resource: "org.bfore.Activity"
+  action: ALLOW
+}
+
+rule campaign_R3 {
+  description: "Campaigns can read all the activity contracts for their activities"
+  participant(p): "org.bfore.Campaign"
+  operation: READ
+  resource(r): "org.bfore.ActivityContract"
+  condition: (p.getIdentifier() == r.activity.campaign.getIdentifier())
+  action: ALLOW
+}
+
+rule campaign_R4 {
+  description: "Campaign can add activy to itself"
+  participant: "org.bfore.Campaign"
+  operation: CREATE
+  resource: "org.bfore.AddActivityToCampaign"
+  action: ALLOW
+}
+
+/**
+* DONOR'S RULES
+*/
+rule donor_R1 {
+  description: "Donors can read their record only"
+  participant(p): "org.bfore.Donor"
+  operation: READ, UPDATE
+  resource(r): "org.bfore.Donor"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW 
+}
+
+rule donor_R2 { 
+  description: "Donors can read all the campaigns"
+  participant: "org.bfore.Donor"
+  operation: READ, UPDATE
+  // UPDATE is just because otherwise they cannot execute transaction FundCampaign
+  resource: "org.bfore.Campaign"
+  action: ALLOW
+}
+
+rule donor_R3 {
+  description: "Donors can read all the activities"
+  participant: "org.bfore.Donor"
+  operation: READ
+  resource: "org.bfore.Activity"
+  action: ALLOW 
+}
+
+rule donor_R4 {
+  description: "Donors can fund the campaign"
+  // TODO: remove the donor field from the transaction and use sender
+  participant: "org.bfore.Donor"
+  operation: CREATE
+  resource: "org.bfore.FundCampaign"
+  action: ALLOW 
+}
+
 
 rule SystemACL {
     description:  "System ACL to permit all access"
