@@ -5,10 +5,11 @@
 /**
 * LET'S START WITH STUDENT ACCESS CONTROL 
 */
+// without update, buyItem doesn't work
 rule student_R1 {
-  description: "Students can read their record only"
+  description: "Students can read and update their record only"
   participant(p): "org.bfore.Student"
-  operation: READ
+  operation: READ, UPDATE
   resource(r): "org.bfore.Student"
   condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW
@@ -47,6 +48,30 @@ rule student_R5{
   operation: READ 
   resource: "org.bfore.Campaign"
   action: ALLOW 
+}
+
+rule student_R6 {
+  description: "Students can modify vendors"
+  participant: "org.bfore.Student"
+  operation: READ, UPDATE
+  resource: "org.bfore.Vendor"
+  action: ALLOW
+}
+
+rule student_R7 {
+  description: "Students can read and modify items"
+  participant: "org.bfore.Student"
+  operation: READ, UPDATE
+  resource: "org.bfore.Item"
+  action: ALLOW
+}
+
+rule student_R8{
+  description: "Students can buy items"
+  participant: "org.bfore.Student"
+  operation: CREATE
+  resource: "org.bfore.BuyItem"
+  action: ALLOW
 }
 
 /**
@@ -121,6 +146,27 @@ rule donor_R4 {
   participant: "org.bfore.Donor"
   operation: CREATE
   resource: "org.bfore.FundCampaign"
+  action: ALLOW 
+}
+
+/**
+* VENDOR'S RULES
+*/
+rule vendor_V1 {
+  description: "Vendor can read their record only"
+  participant(p): "org.bfore.Vendor"
+  operation: READ, UPDATE
+  resource(r): "org.bfore.Vendor"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW 
+}
+
+rule vendor_V2 {
+  description: "Vendor can create items for which they are the owners"
+  participant(p): "org.bfore.Vendor"
+  operation: CREATE
+  resource(r): "org.bfore.Item"
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
   action: ALLOW 
 }
 

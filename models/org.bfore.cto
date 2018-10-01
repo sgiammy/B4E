@@ -31,10 +31,20 @@ enum ActivityType {
 asset ActivityContract identified by activityContractId {
   o String activityContractId
   o DateTime dueDate 
-  o Integer earnedEducoin optional
-  o Boolean winner optional
+  o Integer earnedEducoin default=0
+  o Boolean winner default=false
+  o Boolean[] completedAssignments optional
   --> Activity activity
   --> Student student 
+}
+
+/**
+* The assignments to be completed inside an activity
+ */
+concept Assignment{
+  o String name
+  o String description 
+  o Integer educoin default = 0 
 }
 
 /**
@@ -45,12 +55,26 @@ asset Activity identified by activityId {
   o String activityName
   o String activityDescription optional
   o ActivityType activityType
-  o Integer educoin
+  o Integer educoin default = 0 // = to the sum of the educoin for each assignment
   o Integer bonusEducoin
   o Integer maxStudents
   o Integer currentStudents default=0 
+  o Assignment[] assignments  
   --> Campaign campaign optional
 }
+
+/**
+* Items to be sold in the market place
+ */
+asset Item identified by itemId{
+  o String itemId
+  o String name
+  o String description
+  o Integer cost
+  --> Business owner
+}
+
+
 
 /**
 * A concept for a simple street address
@@ -135,6 +159,7 @@ transaction AddActivityToCampaign {
   o Integer bonusEducoin
   o Integer maxStudents
   o ActivityType activityType
+  o Assignment[] assignments  
 }
 
 /**
@@ -142,7 +167,15 @@ A student complete an activity
  */
 transaction StudentCompleteActivity {
   -->ActivityContract activityContract 
+  o Boolean[] completedAssignments 
   o DateTime today
+}
+
+/**
+A student buy an item
+ */
+transaction BuyItem {
+  --> Item item 
 }
 
 /**

@@ -4,3 +4,10 @@ query Q1 {
     SELECT org.bfore.ActivityContract
       WHERE(_$activity == activity AND _$student == student)
 }
+
+query Q2 {
+  description: "Given an activityID check if there is already a winner"
+  statement: 
+    SELECT org.bfore.ActivityContract
+      WHERE(_$activity == activity AND winner == true)
+}
