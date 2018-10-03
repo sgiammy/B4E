@@ -89,12 +89,12 @@ concept Address {
 /**
 * An abstract participant type in this business network
 */
-abstract participant Business identified by participantId {
-  o String participantId
-  o String name
+abstract participant Business identified by email {
   o String email
+  o String firstName
+  o String lastName
   o Address address optional
-  o Integer educoinBalance default=0
+  o Integer educoinBalance default=0 optional
 }
 
 /** 
