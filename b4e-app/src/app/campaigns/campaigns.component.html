@@ -1,0 +1,22 @@
+<app-smallbanner></app-smallbanner>
+<!-- CAMPAIGN section -->
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+    <h1><br><br>Our Campaigns</h1>
+</div>
+<section class="site-section">
+  <div class="container">
+    <section class="school-features text-dark d-flex" >
+      <div class="inner"  >
+        <div *ngFor="let campaign of campaigns" class="media d-block feature" >
+          <div  class="media-body">
+            <h3  class="mt-0">{{campaign['firstName']}} {{campaign['lastName']}}</h3>
+            <p >Very long description about Campaign.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+<!-- END section -->
+<app-footer></app-footer>

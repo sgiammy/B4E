@@ -1,0 +1,25 @@
+<app-smallbanner></app-smallbanner>
+<!-- ACTIVITY section -->
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+    <h1><br><br>Our Activities</h1>
+</div>
+<section class="site-section">
+    <div class="container">
+      <section class="school-features text-dark d-flex" >
+        <div class="inner"  >
+          <div *ngFor="let activity of activities" class="media d-block feature" >
+            <div class="icon"><span class="flaticon-video-call"></span></div>
+            <div class="media-body">
+              <h3  class="mt-0">{{activity['activityName']}} </h3>
+              <h2>Educoin: {{activity['educoin']}}</h2>
+              <h3>Bonus educoin: {{activity['bonusEducoin']}}</h3>
+              <p>{{activity['activityDescription']}}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+  <!-- END section -->
+  <app-footer></app-footer>
