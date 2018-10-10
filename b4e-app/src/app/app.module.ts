@@ -13,6 +13,8 @@ import { ActivitiesComponent} from './activities/activities.component';
 import { AboutComponent } from './about/about.component';
 import { SmallbannerComponent } from './smallbanner/smallbanner.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -21,7 +23,8 @@ const routes: Routes = [
   {path: 'campaigns', component: CampaignsComponent },
   {path: 'activities', component: ActivitiesComponent },
   {path: 'about', component: AboutComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'login', component: LoginComponent}
 ]; 
 
 @NgModule({
@@ -34,7 +37,9 @@ const routes: Routes = [
     ActivitiesComponent,
     AboutComponent,
     SmallbannerComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     [RouterModule.forRoot(routes)],

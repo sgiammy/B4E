@@ -29,27 +29,7 @@ export class ApiService {
     return this.http.get(API_URL + 'Activity').pipe(
       map(this.extractData)
     );
-  }
-
-  private issueIdentity(data){
-    const identity = {
-      participant: NS + data['participant'] + "#" + data['email'],
-      userID: data['email'],
-      options: {}
-    };
-
-    return this.http.post(API_URL + 'system/identities/issue', 
-      identity, 
-      {responseType: 'blob'})
-      .toPromise()
-      .then((cardData) => {
-        console.log('CARD-DATA', cardData);
-          const file = new File([cardData], 'myCard.card', 
-                {type: 'application/octet-stream', 
-                lastModified: Date.now()});
-       }); 
-
-  }
+  } 
 
   postUser(data) { 
     return this.http.post(API_URL + data['participant'] , {
@@ -57,15 +37,48 @@ export class ApiService {
       email: data['email'],
       firstName: data['firstName'],
       lastName: data['lastName']
-    }).subscribe(res => {
-          console.log(res);
-          this.issueIdentity(data);
-        },
-        err => {
-          console.log("Error occured");
-        }
-      );
+    }).toPromise()
+    .then(() => {
+      const identity = {
+        participant: NS + data['participant'] + "#" + data['email'],
+        userID: data['email'],
+        options: {}
+      };
+
+      return this.http.post(API_URL + 'system/identities/issue', identity, 
+      {responseType: 'blob'}).toPromise();
+
+    })
+    .then((cardData) => {
+      console.log('CARD-DATA', cardData);
+        const file = new File([cardData], 'myCard.card', 
+              {type: 'application/octet-stream', 
+              lastModified: Date.now()});
+              const formData = new FormData();
+              formData.append('card', file);
+      
+              const headers = new HttpHeaders();
+              headers.set('Content-Type', 'multipart/form-data');
+              return this.http.post('http://localhost:3000/api/wallet/import', formData, {
+                withCredentials: true,
+                headers
+              }).toPromise();
+     });
+     
   }
 
+  
+  checkWallet(){
+    return this.http.get('http://localhost:3000/api/wallet',
+     {withCredentials: true}).toPromise();
+  }
+
+  getCurrentUser(){
+    return this.http.get('http://localhost:3000/api/system/ping', {withCredentials:
+  true}).toPromise()
+    .then((data) => {
+      return data; 
+    }); 
+  }
 
 }

@@ -1,7 +1,14 @@
 <app-smallbanner></app-smallbanner>
 
+<!-- SIGN UP PART -->
+<section *ngIf="!authenticated">
+  <a href="http://localhost:3000/auth/github">Sign in with github</a>
+</section>
+<!-- End Signup -->
 
-<section class="site-section bg-light">
+
+<!-- LOGIN FORM -->
+<section *ngIf="authenticated && !loggedIn" class="site-section bg-light">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-5 box">
@@ -40,8 +47,10 @@
     </div>
   </div>
 </section>
-<!-- END section -->
+<!-- END login form -->
 
-
+<section *ngIf="authenticated && loggedIn">
+  <app-profile></app-profile>
+</section>
 
 <app-footer></app-footer>
