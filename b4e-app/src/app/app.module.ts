@@ -15,6 +15,7 @@ import { SmallbannerComponent } from './smallbanner/smallbanner.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CookieService } from 'ngx-cookie-service';
 
 
 const routes: Routes = [
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path: 'activities', component: ActivitiesComponent },
   {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'profile', component: ProfileComponent}
 ]; 
 
 @NgModule({
@@ -48,7 +50,7 @@ const routes: Routes = [
     ReactiveFormsModule
     
   ],
-  providers: [ApiService],
+  providers: [ApiService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

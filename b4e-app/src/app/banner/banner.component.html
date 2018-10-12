@@ -23,10 +23,7 @@
         </ul>
         <ul class="navbar-nav absolute-right">
           <li class="nav-item">
-            <a routerLink="/login" routerLinkActive="nav-link active" class="nav-link">Login</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/register" routerLinkActive="nav-link active" class="nav-link">Register</a>
+            <a (click)="registerLogout();" class="nav-link">{{message}}</a>
           </li>
         </ul>
         

@@ -3,6 +3,8 @@ import { environment } from '../environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { Router } from '@angular/router';
 
 
 const API_URL = environment.apiUrl;
@@ -11,7 +13,7 @@ const NS = "org.bfore.";
 @Injectable()
 export class ApiService {
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private router: Router) { 
   }
 
   private extractData(res: Response){
@@ -77,8 +79,15 @@ export class ApiService {
     return this.http.get('http://localhost:3000/api/system/ping', {withCredentials:
   true}).toPromise()
     .then((data) => {
-      return data; 
+      return data['participant']; 
     }); 
+  }
+
+  logout(){
+     this.http.get("http://localhost:3000/auth/logout",
+    {withCredentials: true}).toPromise();
+   
+   
   }
 
 }

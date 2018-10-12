@@ -30,6 +30,7 @@
     "jquery-waypoints": "^2.0.5",
     "jquery.stellar": "^0.6.2",
     "ngx-bootstrap": "^3.0.1",
+    "ngx-cookie-service": "^1.0.10",
     "npm-font-source-sans-pro": "^1.0.2",
     "popper": "^1.0.1",
     "popper.js": "^1.14.4",
