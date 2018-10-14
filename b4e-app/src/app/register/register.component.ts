@@ -3,6 +3,7 @@ import { FormsModule, FormControl, FormGroup, FormBuilder } from '@angular/forms
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { DataService } from "../data.service";
 
 
 @Component({
@@ -17,10 +18,13 @@ export class RegisterComponent implements OnInit {
   private signUpInProgress = false; 
   private currentUser; 
 
+  message:string;
 
   constructor(private formBuilder: FormBuilder, private api: ApiService, 
-    private route: ActivatedRoute, private router: Router) { 
+    private route: ActivatedRoute, private router: Router,
+    private data: DataService) { 
     this.createForm(); 
+    this.data.currentMessage.subscribe(message => this.message = message);
   }
 
   userForm = new FormGroup ({
@@ -65,6 +69,7 @@ export class RegisterComponent implements OnInit {
     })
     .then(() => {
       this.loggedIn = true;
+      this.data.changeMessage("true");
       this.signUpInProgress = false; 
       this.router.navigateByUrl('/profile');
     })
@@ -85,6 +90,7 @@ export class RegisterComponent implements OnInit {
       if(results['length']>0) {
         console.log('Wallet > 0');
         this.loggedIn = true;
+        this.data.changeMessage("true");
         this.router.navigateByUrl('/profile');
         return this.getCurrentUser(); 
       }
