@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row justify-content-center">
+       
+        <div class="col-md-12 box">
+            <p align="center">You are funding <strong>{{title}}</strong></p>
+            <form [formGroup]="form">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <input class="form-control"  formControlName="amount" placeholder="Enter amount" >
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    
+                    <button class="btn btn-primary"
+                            (click)="close()" >
+                        Back
+                    </button>
+                    <button class="btn btn-primary"
+                            (click)="save()"  style="float: right;">
+                        Fund
+                    </button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

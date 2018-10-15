@@ -4,19 +4,33 @@
 <div class="row align-items-center site-hero-inner justify-content-center">
     <h1><br><br>Our Campaigns</h1>
 </div>
+
 <section class="site-section">
   <div class="container">
     <section class="school-features text-dark d-flex" >
       <div class="inner"  >
-        <div *ngFor="let campaign of campaigns" class="media d-block feature" >
-          <div  class="media-body">
-            <h3  class="mt-0">{{campaign['firstName']}} {{campaign['lastName']}}</h3>
-            <p >Very long description about Campaign.</p>
+        <!-- Only completed campaigns must be shown -->
+        <ng-container *ngFor="let campaign of campaigns">
+          <div class="media d-block feature" *ngIf="campaign['completed']==true" >
+            <div  class="media-body">
+              <!-- firstName has to be changed with name -->
+              <!-- and description has to be added-->
+              <h3  class="mt-0">{{campaign['firstName']}}</h3>
+              <p><strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC</p>
+              <p >Very long description about Campaign.</p>
+              <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
+              <!-- to be changed with if(donor)-->
+              <div *ngIf = "1==true">
+                <input type="submit" (click)="fundCampaign(campaign['firstName'], campaign['email'])" value="Fund it" class="btn btn-primary">
+              </div>
+            </div>
           </div>
-        </div>
+      </ng-container>
       </div>
     </section>
   </div>
 </section>
 <!-- END section -->
+
+
 <app-footer></app-footer>

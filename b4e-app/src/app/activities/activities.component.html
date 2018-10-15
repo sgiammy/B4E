@@ -12,14 +12,23 @@
             <div class="icon"><span class="flaticon-video-call"></span></div>
             <div class="media-body">
               <h3  class="mt-0">{{activity['activityName']}} </h3>
-              <h2>Educoin: {{activity['educoin']}}</h2>
-              <h3>Bonus educoin: {{activity['bonusEducoin']}}</h3>
-              <p>{{activity['activityDescription']}}</p>
+              <p><strong>Description:</strong> {{activity['description']}}</p>
+              <p><strong>Maximum educoin:</strong> {{activity['educoin']}} EDC</p>
+              <p><strong>Bonus educoin:</strong> {{activity['bonusEducoin']}}</p>
+              <p *ngFor="let assignment of activity['assignments']">
+                <strong>assignment['name']</strong> <br>
+                assignment['description'] -- assignment['educoin'] EDC
+              </p>
+              <!-- to be changed with if(student)-->
+              <div *ngIf = "1==true">
+                  <input type="submit" (click)="enrollStudent(activity['activityId'])" value="Enroll" class="btn btn-primary">
+                </div>
             </div>
           </div>
         </div>
       </section>
     </div>
   </section>
+
   <!-- END section -->
   <app-footer></app-footer>

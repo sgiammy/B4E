@@ -22,4 +22,10 @@ export class ActivitiesComponent implements OnInit {
     });
   }
 
+  enrollStudent(activityId){
+    //console.log(activityId);
+
+  }
+
+
 }

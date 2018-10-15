@@ -21,8 +21,25 @@ export class ApiService {
     return body || {};
   }
 
+  private handleError(error: any): Observable<string> {
+    // In a real world app, we might use a remote logging infrastructure
+    // We'd also dig deeper into the error to get a better message
+    const errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
+    return Observable.throw(errMsg);
+}
+
   getCampaigns(): Observable<any> {
     return this.http.get(API_URL + 'Campaign').pipe(
+      map(this.extractData)
+    );
+  }
+
+  // Must be changed with a query bc we only want items 
+  // whose owner is a vendor, and not a student!
+  getItems(): Observable<any> {
+    return this.http.get(API_URL + 'Item').pipe(
       map(this.extractData)
     );
   }
@@ -86,8 +103,24 @@ export class ApiService {
   logout(){
      this.http.get("http://localhost:3000/auth/logout",
     {withCredentials: true}).toPromise();
-   
-   
+  }
+
+  buyItem(itemId){
+    return this.http.post(API_URL + 'BuyItem' , {
+      $class: NS + 'BuyItem',
+      item: itemId
+    })
+    .toPromise();
+  }
+
+  fundCampaign(campaignId, amount){
+    return this.http.post(API_URL + 'FundCampaign', {
+      $class: NS + 'FundCampaign',
+      educoinAmount: amount,
+      campaign: campaignId
+
+    })
+    .toPromise(); 
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from "../data.service";
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service'; 
 
 
 @Component({
@@ -14,7 +15,10 @@ export class SmallbannerComponent implements OnInit {
   message:string;
   private login:string;
 
-  constructor(private data: DataService, private api: ApiService,  private router: Router) { }
+  constructor(private data: DataService, 
+    private api: ApiService,  
+    private router: Router,
+    private cookieService: CookieService) { }
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);
@@ -25,8 +29,11 @@ export class SmallbannerComponent implements OnInit {
   }
 
   registerLogout(){
+    console.log(this.cookieService.get('access_token'));
+    
     if(this.message === "false"){
       this.login = "Login";
+      this.cookieService.delete('access_token');
       this.router.navigateByUrl("/register");
     }
     else{
