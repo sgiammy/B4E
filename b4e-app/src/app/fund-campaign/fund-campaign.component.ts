@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatFormFieldModule } from "@angular/material";
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import { FormGroup, FormBuilder} from '@angular/forms';
 
 
 
@@ -26,7 +26,7 @@ export class FundCampaignComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      //amount: this.amount
+      amount: this.amount
   
     });
   }

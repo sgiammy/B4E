@@ -31,7 +31,7 @@ export class ApiService {
 }
 
   getCampaigns(): Observable<any> {
-    return this.http.get(API_URL + 'Campaign').pipe(
+    return this.http.get('http://localhost:3000/api/' + 'Campaign', {withCredentials: true}).pipe(
       map(this.extractData)
     );
   }
@@ -39,13 +39,13 @@ export class ApiService {
   // Must be changed with a query bc we only want items 
   // whose owner is a vendor, and not a student!
   getItems(): Observable<any> {
-    return this.http.get(API_URL + 'Item').pipe(
+    return this.http.get('http://localhost:3000/api/'  + 'Item', {withCredentials: true}).pipe(
       map(this.extractData)
     );
   }
 
   getActivities(): Observable<any> {
-    return this.http.get(API_URL + 'Activity').pipe(
+    return this.http.get('http://localhost:3000/api/'  + 'Activity', {withCredentials: true}).pipe(
       map(this.extractData)
     );
   } 
@@ -86,6 +86,47 @@ export class ApiService {
      
   }
 
+  postCampaign(data) { 
+    return this.http.post(API_URL + 'Campaign' , {
+      $class: NS + 'Campaign',
+      campaignName: data['campaignName'],
+      campaignDescription: data['campaignDescription'],
+      fundingGoal: 0,
+      funded: false,
+      completed: false,
+      email: data['email'],
+      firstName: data['firstName'],
+      lastName: data['lastName']
+    }).toPromise()
+    .then(() => {
+      const identity = {
+        participant: NS + 'Campaign' + "#" + data['email'],
+        userID: data['email'],
+        options: {}
+      };
+
+      return this.http.post(API_URL + 'system/identities/issue', identity, 
+      {responseType: 'blob'}).toPromise();
+
+    })
+    .then((cardData) => {
+      console.log('CARD-DATA', cardData);
+        const file = new File([cardData], 'myCard.card', 
+              {type: 'application/octet-stream', 
+              lastModified: Date.now()});
+              const formData = new FormData();
+              formData.append('card', file);
+      
+              const headers = new HttpHeaders();
+              headers.set('Content-Type', 'multipart/form-data');
+              return this.http.post('http://localhost:3000/api/wallet/import', formData, {
+                withCredentials: true,
+                headers
+              }).toPromise();
+     });
+     
+  }
+
   
   checkWallet(){
     return this.http.get('http://localhost:3000/api/wallet',
@@ -100,27 +141,76 @@ export class ApiService {
     }); 
   }
 
+  getParticipantById(participantType, participantId){
+    // participantType is like Student
+    // participantId is like adry@cord.com
+    var url = "http://localhost:3000/api/" + participantType + '/' + participantId;  
+
+    return this.http.get(url, {withCredentials: true}
+     ).toPromise()
+    .then((data) => { 
+      return data; 
+    });
+
+  }
+
   logout(){
      this.http.get("http://localhost:3000/auth/logout",
     {withCredentials: true}).toPromise();
   }
 
   buyItem(itemId){
-    return this.http.post(API_URL + 'BuyItem' , {
+    return this.http.post('http://localhost:3000/api/' + 'BuyItem' , {
       $class: NS + 'BuyItem',
       item: itemId
-    })
+    }, {withCredentials: true})
     .toPromise();
   }
 
   fundCampaign(campaignId, amount){
-    return this.http.post(API_URL + 'FundCampaign', {
+    return this.http.post('http://localhost:3000/api/'  + 'FundCampaign', {
       $class: NS + 'FundCampaign',
       educoinAmount: amount,
       campaign: campaignId
 
-    })
+    }, {withCredentials: true})
     .toPromise(); 
+  }
+
+  getActivityContractByStudent(studentId){
+    var url = "http://localhost:3000/api/queries/Q5/" + studentId;
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
+  }
+
+  getItemsByOwnerId(ownerId){
+    var url = "http://localhost:3000/api/queries/Q6/" + ownerId;
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
+  }
+
+  getFundCampaignByDonor(donorId){
+    var url = "http://localhost:3000/api/queries/Q7/" + donorId;
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
+  }
+
+  getAtivitiesByCampaign(campaignId){
+    var url = "http://localhost:3000/api/queries/Q8/" + campaignId;
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
   }
 
 }

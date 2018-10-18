@@ -17,7 +17,7 @@ export class ActivitiesComponent implements OnInit {
   getActivities(){
     this.activities = [];
     this.api.getActivities().subscribe((data: {}) => {
-      console.log(data);
+      //console.log(data);
       this.activities = data;
     });
   }

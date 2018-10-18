@@ -17,17 +17,21 @@ export class RegisterComponent implements OnInit {
   private loggedIn = false;
   private signUpInProgress = false; 
   private currentUser; 
+  private campaign = false; 
 
   message:string;
 
   constructor(private formBuilder: FormBuilder, private api: ApiService, 
     private route: ActivatedRoute, private router: Router,
     private data: DataService) { 
+
     this.createForm(); 
-    this.data.currentMessage.subscribe(message => this.message = message);
+   
   }
 
   userForm = new FormGroup ({
+    campaignName: new FormControl(),
+    campaignDescription: new FormControl(),
     firstName: new FormControl(),
     lastName: new FormControl(),
     email: new FormControl(),
@@ -37,6 +41,7 @@ export class RegisterComponent implements OnInit {
   participants = ['Donor','Student','Vendor'];
 
   ngOnInit() {
+    this.data.currentMessage.subscribe(message => this.message = message);
     this.route
       .queryParams
       .subscribe((queryParams) => {
@@ -52,7 +57,9 @@ export class RegisterComponent implements OnInit {
       firstName: '',
       lastName: '',
       email: '',
-      participant: ''
+      participant: '',
+      campaignName: '',
+      campaignDescription: ''
     }); 
   }
 
@@ -81,6 +88,9 @@ export class RegisterComponent implements OnInit {
     return this.api.getCurrentUser()
       .then((currentUser) => {
         this.currentUser = currentUser; 
+        console.log(this.currentUser);
+        if(this.currentUser.split('.')[2].includes('Campaign'))
+          this.campaign = true; 
       });
   }
 
@@ -90,10 +100,49 @@ export class RegisterComponent implements OnInit {
       if(results['length']>0) {
         console.log('Wallet > 0');
         this.loggedIn = true;
-        this.data.changeMessage("true");
-        this.router.navigateByUrl('/profile');
-        return this.getCurrentUser(); 
+        this.getCurrentUser().then(() => {
+          this.data.changeMessage("true");
+          if(this.campaign == false)
+            this.router.navigateByUrl('/profile');
+          else
+            this.router.navigateByUrl('/campaignprofile');
+        })
+        return;
       }
+    })
+  }
+
+  campaignLogin(){
+    if(this.campaign == false){
+      this.campaign = true; 
+      //console.log(this.campaign);
+    } 
+    else {
+      this.campaign = false; 
+      //console.log(this.campaign);
+    }
+  }
+
+  newCampaign(){
+    var data = [];
+    data['campaignName'] = this.userForm.get('campaignName').value;
+    data['campaignDescription'] = this.userForm.get('campaignDescription').value;
+    data['firstName'] = this.userForm.get('firstName').value;
+    data['lastName'] = this.userForm.get('lastName').value;
+    data['email'] = this.userForm.get('email').value;
+    data['participant'] = this.userForm.get('participant').value;
+    return this.api.postCampaign(data)
+    .then(() => {
+      this.getCurrentUser();
+    })
+    .then(() => {
+      this.loggedIn = true;
+      this.data.changeMessage("true");
+      this.signUpInProgress = false; 
+      if(this.campaign == false)
+        this.router.navigateByUrl('/profile');
+      else
+        this.router.navigateByUrl('./campaignprofile'); 
     })
   }
 

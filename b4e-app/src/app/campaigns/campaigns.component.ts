@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment'; 
 import { ApiService } from '../api.service';
 import {MatDialog, MatDialogConfig} from '@angular/material'; 
 import {FundCampaignComponent} from '../fund-campaign/fund-campaign.component'; 

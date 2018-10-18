@@ -1,7 +1,85 @@
 <app-smallbanner></app-smallbanner>
 
-<p>
-  {{currentUser}}
-</p>
+<br><br>
+<div class="row align-items-center site-hero-inner justify-content-center">
+   
+  <h1>{{details['firstName']}} {{details['lastName']}}</h1>
+ 
+</div>
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+        <h5>Balance: {{details['educoinBalance']}} EDC</h5>
+</div>
+
+<!-- ACTIVITIES -->
+<section *ngIf="details['$class'] == 'org.bfore.Student'" class="site-section">
+    <div class="container">
+      <section class="school-features text-dark d-flex" >
+        <h4>Your activities</h4>
+        <!-- Q5 Add query get ActivityContract by studentId-->
+        <div class="inner"  >
+          <div *ngFor="let activity of activities" class="media d-block feature" >
+            <div class="icon"><span class="flaticon-video-call"></span></div>
+            <div class="media-body">
+              <h3  class="mt-0">{{activity['activity']}} </h3>
+              <p><strong>Due date:</strong> {{activity['dueDate']}}</p>
+              <p><strong>Earned educoin:</strong> {{activity['earnedEducoin']}} EDC</p>
+              <p><strong>Bonus educoin:</strong> {{activity['bonusEducoin']}}</p>
+              <p *ngFor="let assignment of activity['completedAssignments']">
+                <strong>assignment['name']</strong> <br>
+                assignment['description'] -- assignment['educoin'] EDC
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+</section>
+
+<!-- ITEMS -->
+<section *ngIf="details['$class'] == 'org.bfore.Student' || details['$class'] == 'org.bfore.Vendor'" class="site-section">
+    <div class="container">
+      <section class="school-features text-dark d-flex" >
+        <h4>Your items</h4>
+        <!-- Q6 Add query get items by ownerId-->
+          <div class="inner"  >
+            <ng-container *ngFor="let item of items">
+              <!-- Show the items owned by the student or the vendor -->
+              <div class="media d-block feature" >
+                <div  class="media-body">
+                  <h3  class="mt-0">{{item['name']}} </h3>
+                  <h6 class="mt-0">{{item['cost']}} EDC</h6>
+                  <p >{{item['description']}}</p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+    </section>
+  </div>
+</section>
+
+<!-- IF DONOR -->
+<section *ngIf="details['$class'] == 'org.bfore.Donor'" class="site-section">
+    <div class="container">
+      <section class="school-features text-dark d-flex" >
+        <h4>Your campaigns</h4>
+        <!-- Q7 Add query get "FundCampaign" transactionb by donor -->
+        <div class="inner"  >
+          <!-- Only completed campaigns must be shown -->
+          <ng-container *ngFor="let campaign of campaigns">
+            <div class="media d-block feature">
+              <div  class="media-body">
+                <h3  class="mt-0">{{campaign['campaignName']}}</h3>
+                <p><strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC</p>
+                <p >{{campaign['campaignDescription']}}</p>
+                <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
+              </div>
+            </div>
+        </ng-container>
+        </div>
+    </section>
+  </div>
+</section>
+
 
 <app-footer></app-footer>

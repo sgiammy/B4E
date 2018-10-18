@@ -33,8 +33,8 @@ export class SmallbannerComponent implements OnInit {
     
     if(this.message === "false"){
       this.login = "Login";
-      this.cookieService.delete('access_token');
-      this.router.navigateByUrl("/register");
+      //this.cookieService.delete('access_token');  
+      window.location.href = "http://localhost:3000/auth/google"; 
     }
     else{
       this.login = "Logout";

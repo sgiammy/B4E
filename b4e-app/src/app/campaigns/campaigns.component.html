@@ -15,9 +15,9 @@
             <div  class="media-body">
               <!-- firstName has to be changed with name -->
               <!-- and description has to be added-->
-              <h3  class="mt-0">{{campaign['firstName']}}</h3>
+              <h3  class="mt-0">{{campaign['campaignName']}}</h3>
               <p><strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC</p>
-              <p >Very long description about Campaign.</p>
+              <p >{{campaign['campaignDescription']}}</p>
               <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
               <!-- to be changed with if(donor)-->
               <div *ngIf = "1==true">

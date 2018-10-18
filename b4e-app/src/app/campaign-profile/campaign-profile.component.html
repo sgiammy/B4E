@@ -1,0 +1,60 @@
+<app-smallbanner></app-smallbanner>
+
+<br><br>
+<div class="row align-items-center site-hero-inner justify-content-center">
+  <h1>{{details['campaignName']}}</h1>
+</div>
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+    <p>{{details['campaignDescription']}}</p>
+</div>
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+    <h5>Balance: {{details['educoinBalance']}} EDC<br><br><br><br></h5>
+   
+</div>
+
+<div class="row align-items-center site-hero-inner justify-content-center">
+    <input *ngIf = "details['completed']==false" type="submit" (click)="addActivity();" value="Add activity" class="btn btn-primary"> 
+</div>
+
+
+
+
+<!-- ACTIVITIES -->
+<section class="site-section">
+    <div class="container">
+      <section class="school-features text-dark d-flex" >
+        <h4>Your activities</h4>
+        <!-- Q8 -->
+        <div class="inner"  >
+          <div *ngFor="let activity of activities" class="media d-block feature" >
+            <div class="icon"><span class="flaticon-video-call"></span></div>
+            <div class="media-body">
+              <h3  class="mt-0">{{activity['activityName']}} </h3>
+              <p><strong>Description:</strong> {{activity['activityDescription']}}</p>
+              <p><strong>Max students:</strong> {{activity['maxStudents']}}</p>
+              <p><strong>Current students:</strong> {{activity['currentStudents']}}</p>
+              <p><strong>Funding goal:</strong> {{activity['fundingGoal']}} EDC</p>
+              <p *ngFor="let assignment of activity['assignments']">
+                <strong>assignment['name']</strong> <br>
+                assignment['description'] -- assignment['educoin'] EDC
+              </p>
+            </div>
+          </div>
+          
+       
+        </div>
+      
+           
+      
+      </section>
+    </div>
+</section>
+
+
+
+
+
+
+<app-footer></app-footer>

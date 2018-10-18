@@ -16,9 +16,9 @@ export class BannerComponent implements OnInit {
   constructor(private data: DataService, private api: ApiService,  private router: Router) { }
 
   ngOnInit() {
-    console.log(this.message);
+    
     this.data.currentMessage.subscribe(message => this.message = message);
-    console.log(this.message);
+
     if(this.message === "true"){
       this.login = "Logout";
     } else {
@@ -29,13 +29,18 @@ export class BannerComponent implements OnInit {
   registerLogout(){
     this.data.currentMessage.subscribe(message => this.message = message);
     if(this.message === "false"){
-      this.router.navigateByUrl("/register");
+      //this.cookieService.delete('access_token');
+      window.location.href = "http://localhost:3000/auth/google"; 
     }
     else{
       this.api.logout();
       this.data.changeMessage("false");
-      this.router.navigateByUrl('/home'); 
+      this.login = "Login";
     }
+    
+  }
+
+  goToProfile(){
     
   }
 }

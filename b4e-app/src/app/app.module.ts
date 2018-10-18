@@ -22,6 +22,8 @@ import { FundCampaignComponent } from './fund-campaign/fund-campaign.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule} from '@angular/material/button';
 import { BuyItemComponent } from './buy-item/buy-item.component';
+import { CampaignProfileComponent } from './campaign-profile/campaign-profile.component';
+import { CreateActivityComponent } from './create-activity/create-activity.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -32,7 +34,8 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'profile', component: ProfileComponent},
-  {path: 'marketplace', component: MarketplaceComponent }
+  {path: 'marketplace', component: MarketplaceComponent },
+  {path: 'campaignprofile', component: CampaignProfileComponent }
 ]; 
 
 @NgModule({
@@ -50,7 +53,9 @@ const routes: Routes = [
     ProfileComponent,
     MarketplaceComponent,
     FundCampaignComponent,
-    BuyItemComponent
+    BuyItemComponent,
+    CampaignProfileComponent,
+    CreateActivityComponent
   ],
   imports: [
     [RouterModule.forRoot(routes)],
@@ -67,6 +72,6 @@ const routes: Routes = [
   providers: [ApiService, CookieService,
     ],
   bootstrap: [AppComponent],
-  entryComponents: [FundCampaignComponent, BuyItemComponent]
+  entryComponents: [FundCampaignComponent, BuyItemComponent, CreateActivityComponent]
 })
 export class AppModule { }

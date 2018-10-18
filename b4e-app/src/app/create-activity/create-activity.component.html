@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 box">
+           
+                <p>Enter activity details</p>
+                <form [formGroup]="form">
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <input class="form-control"  formControlName="activityName" placeholder="Name" >
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <textarea class="form-control"  formControlName="activityDescription" placeholder="Enter description..."></textarea>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <label>Is that the last activity of this campaign?</label><br>
+                            <input type="radio" name="completeCampaign" [value]="true"><label>Yes</label><br>
+                        
+                            <input type="radio" name="completeCampaign" [value]="false"><label>No</label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input class="form-control"  formControlName="bonusEducoin" placeholder="Bonus educoin" >
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input class="form-control"  formControlName="maxStudents" placeholder="Max students" >
+                        </div>
+                    </div>
+                    <div class="col-md-8 form-group">
+                        <button class="btn btn-primary"
+                                (click)="close()" >
+                            Back
+                        </button>
+                        <button class="btn btn-primary"
+                                (click)="save()"  style="float: right;">
+                            Add
+                        </button> 
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</div>
+

@@ -2,13 +2,13 @@
 
 <!-- SIGN UP PART -->
 <section *ngIf="!authenticated">
-  <a href="http://localhost:3000/auth/google">Sign in with Google</a>
+  <!-- there was the google link here before -->
 </section>
 <!-- End Signup -->
 
 
 <!-- LOGIN FORM -->
-<section *ngIf="authenticated && !loggedIn" class="site-section bg-light">
+<section *ngIf="authenticated && !loggedIn && !campaign" class="site-section bg-light">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-5 box">
@@ -42,12 +42,60 @@
               <input type="submit" (click)="newUser();" value="Sign up" class="btn btn-primary">
             </div>
           </div>
+          <a routerLink="/register" (click)="campaignLogin()">Are you a campaign?</a>
          </form>
       </div>
     </div>
   </div>
 </section>
 <!-- END login form -->
+
+<!-- LOGIN FORM FOR CAMPAIGN -->
+<section *ngIf="authenticated && !loggedIn && campaign" class="site-section bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-5 box">
+          <form [formGroup]="userForm">
+            
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label>Campaign name</label>
+                <input formControlName="campaignName" class="form-control ">
+              </div>
+              <div class="col-md-12 form-group">
+                <label>Campaign description</label>
+                <input formControlName="campaignDescription" class="form-control ">
+              </div>
+              <div class="col-md-12 form-group">
+                <label>Responsible first name</label>
+                <input formControlName="firstName" class="form-control ">
+              </div>
+              <div class="col-md-12 form-group">
+                <label>Responsible last name</label>
+                <input formControlName="lastName" class="form-control ">
+              </div>
+              <div class="col-md-12 form-group">
+                <label>Email Address</label>
+                <input formControlName="email" class="form-control ">
+              </div>
+            
+              
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="submit" (click)="newCampaign();" value="Sign up" class="btn btn-primary">
+              </div>
+            </div>
+            <a routerLink="/register" (click)="campaignLogin()">Back</a>
+             
+            
+           </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- END login form -->
 
 
 <app-footer></app-footer>
