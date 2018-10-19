@@ -204,13 +204,47 @@ export class ApiService {
      });
   }
 
-  getAtivitiesByCampaign(campaignId){
-    var url = "http://localhost:3000/api/queries/Q8/" + campaignId;
+
+
+  getActivitiesByCampaign(campaignId){
+    var url = "http://localhost:3000/api/queries/Q8?campaign=resource%3Aorg.bfore.Campaign%23" + campaignId; 
     return this.http.get(url, {withCredentials: true}
       ).toPromise()
      .then((data) => { 
        return data; 
      });
+  }
+
+  addActivityToCampaign(data){
+    var url = "http://localhost:3000/api/AddActivityToCampaign"; 
+    return this.http.post(url, {
+      $class: NS + 'AddActivityToCampaign',
+      activityName: data['activityName'],
+      activityDescription: data['activityDescription'],
+      completeCampaign: data['completeCampaign'],
+      educoin: 0,
+      bonusEducoin: data['bonusEducoin'],
+      maxStudents: data['maxStudents'],
+      assignments: data['assignments'],
+      activityType: "LEARNING",
+      
+
+    }, {withCredentials: true})
+    .toPromise(); 
+  }
+
+  enrollStudentToActivity(activityId){
+    var activity = "resource:org.bfore.Activity#" + activityId ; 
+
+    var url = "http://localhost:3000/api/EnrollStudentToActivity"; 
+    return this.http.post(url, {
+      $class: NS + 'EnrollStudentToActivity',
+      dueDate: "2019-10-18T19:11:33.786Z",
+      earnedEducoin: 0,
+      winner: false,
+      activity: activity
+    }, {withCredentials: true})
+    .toPromise(); 
   }
 
 }

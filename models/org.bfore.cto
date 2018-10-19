@@ -16,6 +16,7 @@
  * Write your model definitions here
  */
 
+
 namespace org.bfore
 
 
@@ -60,7 +61,7 @@ asset Activity identified by activityId {
   o Integer maxStudents
   o Integer currentStudents default=0 
   o Assignment[] assignments  
-  --> Campaign campaign optional
+  --> Campaign campaign
 }
 
 /**
@@ -126,10 +127,14 @@ A campaign is also a participant, since it can transfer and own educoins.
 For now is like a business, but may be changed later
  */
 participant Campaign extends Business {
+  o String campaignName
+  o String campaignDescription
   o Integer fundingGoal default=0
   o Boolean funded // this means that the funding goal has been reached
   o Boolean completed // this means that all the activities have been added
 }
+  
+
 
 /**
 A donor can give Educoin to a campaign (funding) 
@@ -137,25 +142,21 @@ A donor can give Educoin to a campaign (funding)
 transaction FundCampaign{
   o Integer educoinAmount
   --> Campaign campaign
+  --> Donor donor
 }
 
 /**
 A student enroll to an Activity 
  */
 transaction EnrollStudentToActivity {
-  o String activityContractId
   o DateTime dueDate
-  o Integer earnedEducoin optional
-  o Boolean winner optional
   --> Activity activity
 }
 
 transaction AddActivityToCampaign {
-  o String activityId
   o String activityName
   o String activityDescription optional
   o Boolean completeCampaign
-  o Integer educoin
   o Integer bonusEducoin
   o Integer maxStudents
   o ActivityType activityType
@@ -177,6 +178,16 @@ A student buy an item
 transaction BuyItem {
   --> Item item 
 }
+
+/* 
+* A vendor can create a new item
+*/
+transaction AddItem {
+  o String name
+  o String description
+  o String cost
+}
+  
 
 /**
 Just for initializing a Demo

@@ -26,7 +26,7 @@
           </ul>
           <ul class="navbar-nav absolute-right">
             <li class = "nav-item" *ngIf="message === 'true'">
-              <a class="nav-link" routerLink="/profile" routerLinkActive="nav-link-active">Profile</a>
+              <a class="nav-link" (click)="goToProfile()" routerLinkActive="nav-link-active">Profile</a>
             </li>
             <li class="nav-item">
               <a (click)="registerLogout();" class="nav-link">{{login}}</a>

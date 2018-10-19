@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class BannerComponent implements OnInit {
 
   message:string;
+  private isCampaign:string; 
   login:string;
 
   constructor(private data: DataService, private api: ApiService,  private router: Router) { }
@@ -18,6 +19,7 @@ export class BannerComponent implements OnInit {
   ngOnInit() {
     
     this.data.currentMessage.subscribe(message => this.message = message);
+    this.data.currentIsCampaign.subscribe(isCampaign => this.isCampaign = isCampaign);
 
     if(this.message === "true"){
       this.login = "Logout";
@@ -41,6 +43,9 @@ export class BannerComponent implements OnInit {
   }
 
   goToProfile(){
-    
+    if(this.isCampaign === "true")
+      this.router.navigateByUrl('/campaignprofile');
+    else
+      this.router.navigateByUrl('/profile');
   }
 }

@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   private currentUser; 
   private campaign = false; 
 
+  isCampaign:string;
   message:string;
 
   constructor(private formBuilder: FormBuilder, private api: ApiService, 
@@ -42,6 +43,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);
+    this.data.currentIsCampaign.subscribe(message => this.isCampaign = message);
     this.route
       .queryParams
       .subscribe((queryParams) => {
@@ -89,8 +91,11 @@ export class RegisterComponent implements OnInit {
       .then((currentUser) => {
         this.currentUser = currentUser; 
         console.log(this.currentUser);
-        if(this.currentUser.split('.')[2].includes('Campaign'))
+        if(this.currentUser.split('.')[2].includes('Campaign')){
           this.campaign = true; 
+          this.data.changeIsCampaign("true");
+          console.log(this.isCampaign); 
+        }
       });
   }
 
@@ -115,11 +120,13 @@ export class RegisterComponent implements OnInit {
   campaignLogin(){
     if(this.campaign == false){
       this.campaign = true; 
-      //console.log(this.campaign);
+      this.data.changeIsCampaign("true");
+      console.log(this.isCampaign);
     } 
     else {
-      this.campaign = false; 
-      //console.log(this.campaign);
+      this.campaign = false;
+      this.data.changeIsCampaign("false"); 
+      console.log(this.isCampaign);
     }
   }
 
@@ -142,7 +149,7 @@ export class RegisterComponent implements OnInit {
       if(this.campaign == false)
         this.router.navigateByUrl('/profile');
       else
-        this.router.navigateByUrl('./campaignprofile'); 
+        this.router.navigateByUrl('/campaignprofile'); 
     })
   }
 

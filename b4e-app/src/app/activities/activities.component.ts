@@ -12,6 +12,7 @@ export class ActivitiesComponent implements OnInit {
   constructor(private api: ApiService) { }
 
   ngOnInit() {
+    this.getActivities();
   }
 
   getActivities(){
@@ -23,7 +24,8 @@ export class ActivitiesComponent implements OnInit {
   }
 
   enrollStudent(activityId){
-    //console.log(activityId);
+    console.log(activityId);
+    this.api.enrollStudentToActivity(activityId);
 
   }
 

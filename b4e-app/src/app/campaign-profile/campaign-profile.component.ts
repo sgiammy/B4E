@@ -20,12 +20,7 @@ export class CampaignProfileComponent implements OnInit {
   private details; 
 
   ngOnInit() {
-    this.getCurrentUser()
-    this.getActivitiesByCampaign();
-  }
-
-  getActivitiesByCampaign(){
-    this.api.getAtivitiesByCampaign(this.participantId);
+    this.getCurrentUser();
   }
 
   private openDialog() {
@@ -34,7 +29,6 @@ export class CampaignProfileComponent implements OnInit {
     dialogConfig.autoFocus = true;
   
     dialogConfig.data = {
-      campaignName: 'ciao'
 
     };
   
@@ -43,7 +37,8 @@ export class CampaignProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {
         console.log("Dialog output: ", data);
-        //this.amount = data.amount;
+        var newData = this.changeFormat(data);
+        this.api.addActivityToCampaign(newData);
       }
     );
 
@@ -69,6 +64,12 @@ export class CampaignProfileComponent implements OnInit {
     this.api.getParticipantById(this.participantType, this.participantId)
       .then((details) => {
         this.details = details; 
+        
+        this.api.getActivitiesByCampaign(this.participantId)
+          .then((activities) => {
+            this.activities = activities; 
+            console.log(activities);
+          });
       });
   }
 
@@ -76,4 +77,25 @@ export class CampaignProfileComponent implements OnInit {
     this.openDialog();
   }
 
+  changeFormat(data){
+    var newData = {};
+    newData['activityName'] = data['activityName'];
+    newData['activityDescription'] = data['activityDescription'];
+    newData['completeCampaign'] = data['completeCampaign']; 
+    newData['maxStudents'] = data['maxStudents'];
+    newData['bonusEducoin'] = data['bonusEducoin']; 
+
+    var assignments = []
+    for(var i=0; i<data['assignmentNames'].length; i++){
+      assignments.push({
+        "name": data['assignmentNames'][i],
+        "description": data['assignmentDescriptions'][i],
+        "educoin": data['assignmentCosts'][i]
+      });
+    }
+    newData['assignments'] = assignments;
+
+    console.log(newData);
+    return newData; 
+  }
 }

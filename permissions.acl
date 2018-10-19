@@ -87,9 +87,9 @@ rule campaign_R1 {
 }
 
 rule campaign_R2 {
-  description: "Campaigns can create and read all the activities"
+  description: "Campaigns can create, read and delete all the activities"
   participant: "org.bfore.Campaign"
-  operation: CREATE, READ
+  operation: CREATE, READ, DELETE
   resource: "org.bfore.Activity"
   action: ALLOW
 }

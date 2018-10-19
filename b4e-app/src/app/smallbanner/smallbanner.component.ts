@@ -14,6 +14,7 @@ export class SmallbannerComponent implements OnInit {
 
   message:string;
   private login:string;
+  private isCampaign:string;
 
   constructor(private data: DataService, 
     private api: ApiService,  
@@ -22,6 +23,7 @@ export class SmallbannerComponent implements OnInit {
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);
+    this.data.currentIsCampaign.subscribe(isCampaign => this.isCampaign = isCampaign);
     if (this.message === "true")
       this.login = "Logout";
     else
@@ -29,8 +31,6 @@ export class SmallbannerComponent implements OnInit {
   }
 
   registerLogout(){
-    console.log(this.cookieService.get('access_token'));
-    
     if(this.message === "false"){
       this.login = "Login";
       //this.cookieService.delete('access_token');  
@@ -43,6 +43,14 @@ export class SmallbannerComponent implements OnInit {
       this.router.navigateByUrl('/home'); 
     }
     
+  }
+
+  goToProfile(){
+    console.log(this.isCampaign);
+    if(this.isCampaign === "true")
+      this.router.navigateByUrl('/campaignprofile');
+    else
+      this.router.navigateByUrl('/profile');
   }
 
 }

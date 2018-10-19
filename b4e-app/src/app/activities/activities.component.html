@@ -9,15 +9,16 @@
       <section class="school-features text-dark d-flex" >
         <div class="inner"  >
           <div *ngFor="let activity of activities" class="media d-block feature" >
-            <div class="icon"><span class="flaticon-video-call"></span></div>
+            
             <div class="media-body">
               <h3  class="mt-0">{{activity['activityName']}} </h3>
-              <p><strong>Description:</strong> {{activity['description']}}</p>
-              <p><strong>Maximum educoin:</strong> {{activity['educoin']}} EDC</p>
-              <p><strong>Bonus educoin:</strong> {{activity['bonusEducoin']}}</p>
+              <p><strong>Description:</strong> {{activity['description']}}<br>
+                 <strong>Maximum educoin:</strong> {{activity['educoin']}} EDC<br>
+                <strong>Bonus:</strong> {{activity['bonusEducoin']}} EDC<br>
+                <strong>Maximum students:</strong> {{activity['maxStudents']}}</p>
               <p *ngFor="let assignment of activity['assignments']">
-                <strong>assignment['name']</strong> <br>
-                assignment['description'] -- assignment['educoin'] EDC
+                <strong>{{assignment['name']}}</strong> <br>
+                {{assignment['description']}}<br>{{assignment['educoin']}} EDC
               </p>
               <!-- to be changed with if(student)-->
               <div *ngIf = "1==true">
