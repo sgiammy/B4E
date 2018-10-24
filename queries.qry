@@ -18,36 +18,36 @@ query Q2 {
 query Q3 {
   description: "Get completed campaigns"
   statement:
-  	SELECT org.bfore.Campaign
-  		WHERE(completed == true)
+    SELECT org.bfore.Campaign
+      WHERE(completed == true)
 }
 
 
 query Q5 {
   description: "Get the activities of a student"
   statement:
-  	SELECT org.bfore.ActivityContract
-  		WHERE(_$student == student) 
+    SELECT org.bfore.ActivityContract
+      WHERE(_$student == student) 
 
 }
 
 query Q6 {
   description: "Get items by ownerID"
   statement:
-  	SELECT org.bfore.Item
-  		WHERE(_$owner == owner)
+    SELECT org.bfore.Item
+      WHERE(_$owner == owner)
 }
 
 query Q7 {
   description: "Get FundCampaign transaction by donor" 
   statement:
-  	SELECT org.bfore.FundCampaign
-  		WHERE(_$donor == donor) 
+    SELECT org.bfore.FundCampaign
+      WHERE(_$donor == donor) 
 }
 
 query Q8 {
  description: "Get all the activities of a given campaign"
  statement:
   SELECT org.bfore.Activity
-  	WHERE(_$campaign == campaign)
+    WHERE(_$campaign == campaign)
 }

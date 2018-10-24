@@ -1,34 +1,30 @@
-/*
-* Sample access control list.
- */
-
 /**
 * LET'S START WITH STUDENT ACCESS CONTROL 
 */
-// without update, buyItem doesn't work
+
+// Students: 16 rules 
 rule student_R1 {
-  description: "Students can read and update their record only"
+  description: "Students can read their record only"
   participant(p): "org.bfore.Student"
-  operation: READ, UPDATE
+  operation: READ
   resource(r): "org.bfore.Student"
   condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW
 }
 
 rule student_R2 {
-  description: "Students can only read their ActivityContract"
+  description: "Students can read only their ActivityContract"
   participant(p): "org.bfore.Student"
-  operation: CREATE, READ
+  operation: READ
   resource(r): "org.bfore.ActivityContract"
   condition: (p.getIdentifier() == r.student.getIdentifier())
   action: ALLOW
 }
 
-// The update is needed to update the currentStudents field in Activity
 rule student_R3 {
   description: "Students can read all the activities"
   participant: "org.bfore.Student"
-  operation: READ, UPDATE
+  operation: READ
   resource: "org.bfore.Activity"
   action: ALLOW
 }
@@ -41,9 +37,9 @@ rule student_R4{
   action: ALLOW
 }
 
-// Without this Student cannot do the transaction EnrollStudentToActivity
+// Also without this Student cannot do the transaction EnrollStudentToActivity
 rule student_R5{
-  description: "Students can read campaign"
+  description: "Students can read the campaign"
   participant: "org.bfore.Student"
   operation: READ 
   resource: "org.bfore.Campaign"
@@ -51,73 +47,210 @@ rule student_R5{
 }
 
 rule student_R6 {
-  description: "Students can modify vendors"
+  description: "Students can read and update vendors balance in the BuyItem transaction"
   participant: "org.bfore.Student"
   operation: READ, UPDATE
   resource: "org.bfore.Vendor"
+  transaction: "org.bfore.BuyItem" 
   action: ALLOW
 }
 
 rule student_R7 {
-  description: "Students can read and modify items"
+  description: "Students can read items"
   participant: "org.bfore.Student"
-  operation: READ, UPDATE
+  operation: READ
   resource: "org.bfore.Item"
   action: ALLOW
 }
 
-rule student_R8{
-  description: "Students can buy items"
+rule student_R8 {
+  description: "Students can make the BuyItem transaction"
   participant: "org.bfore.Student"
   operation: CREATE
   resource: "org.bfore.BuyItem"
   action: ALLOW
 }
 
-/**
-* CAMPAIGN'S RULES 
-*/
-rule campaign_R1 {
-  description: "Campaigns can read only their record"
-  participant(p): "org.bfore.Campaign"
-  operation: READ, UPDATE
-  resource(r): "org.bfore.Campaign"
+rule student_R9 {
+  description: "Students can make the EnrollStudentToActivity transaction" 
+  participant: "org.bfore.Student"
+  operation: CREATE
+  resource: "org.bfore.EnrollStudentToActivity"
+  action: ALLOW
+}
+
+rule student_R10 {
+ description: "Student can make a StudentSubmitActivity transaction" 
+ participant: "org.bfore.Student" 
+ operation: CREATE
+ resource: "org.bfore.StudentSubmitActivity"
+ action: ALLOW 
+}
+
+rule student_R11 {
+  description: "Students can update their record only in the context of the BuyItem transaction"
+  participant(p): "org.bfore.Student"
+  operation: UPDATE
+  resource(r): "org.bfore.Student"
+  transaction(tx): "org.bfore.BuyItem" 
   condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW
 }
 
-rule campaign_R2 {
-  description: "Campaigns can create, read and delete all the activities"
-  participant: "org.bfore.Campaign"
-  operation: CREATE, READ, DELETE
+rule student_R12 {
+  description: "Students can create a ActivityContract in the EnrollStudentToActivity transaction"
+  participant: "org.bfore.Student"
+  operation: CREATE
+  resource: "org.bfore.ActivityContract"
+  transaction: "org.bfore.EnrollStudentToActivity"
+  action: ALLOW
+}
+
+rule student_R13 {
+  description: "Students can update their ActivityContract in the StudentSubmitActivity transaction"
+  participant(p): "org.bfore.Student"
+  operation: UPDATE
+  resource(r): "org.bfore.ActivityContract"
+  transaction(tx): "org.bfore.StudentSubmitActivity"
+  condition: (p.getIdentifier() == r.student.getIdentifier())
+  action: ALLOW
+}
+
+rule student_R14 {
+  description: "Students can update the activities in the EnrollStudentToActivity transaction, to modify currentStudents"
+  participant: "org.bfore.Student"
+  operation: UPDATE
   resource: "org.bfore.Activity"
+  transaction: "org.bfore.EnrollStudentToActivity" 
+  action: ALLOW
+}
+
+rule student_R15{
+  description: "Students can modify items owner in the BuyItem transaction"
+  participant: "org.bfore.Student"
+  operation: UPDATE
+  resource: "org.bfore.Item"
+  transaction: "org.bfore.BuyItem"
+  action: ALLOW
+}
+
+rule student_R16 {
+  description: "Students can read all the activity contracts" 
+  participant: "org.bfore.Student"
+  operation: READ
+  resource: "org.bfore.ActivityContract"
+  action: ALLOW
+}
+
+/**
+* CAMPAIGN'S RULES 
+*/
+// Campaign: 10 Rules 
+rule campaign_R1 {
+  description: "Campaigns can read other campaigns"
+  participant: "org.bfore.Campaign"
+  operation: READ
+  resource: "org.bfore.Campaign"
+  action: ALLOW
+}
+
+rule campaign_R2 {
+  description: "Campaigns can create their activities"
+  participant(p): "org.bfore.Campaign"
+  operation: CREATE
+  resource(r): "org.bfore.Activity"
+  condition: (p.getIdentifier() == r.campaign.getIdentifier()) 
   action: ALLOW
 }
 
 rule campaign_R3 {
   description: "Campaigns can read all the activity contracts for their activities"
   participant(p): "org.bfore.Campaign"
-  operation: READ
+  operation: READ 
   resource(r): "org.bfore.ActivityContract"
   condition: (p.getIdentifier() == r.activity.campaign.getIdentifier())
   action: ALLOW
 }
 
 rule campaign_R4 {
-  description: "Campaign can add activy to itself"
+  description: "Campaign can make the AddActivityToCampaign tx"
   participant: "org.bfore.Campaign"
   operation: CREATE
   resource: "org.bfore.AddActivityToCampaign"
   action: ALLOW
 }
 
+rule campaign_R5 {
+  description: "Campaign can make the StudentompleteActivity tx" 
+  participant(p): "org.bfore.Campaign"
+  operation: CREATE
+  resource(r): "org.bfore.StudentCompleteActivity" 
+  condition: (p.getIdentifier() == r.activityContract.activity.campaign.getIdentifier())
+  action: ALLOW
+}
+
+rule campaign_R6 {
+  description: "Campaign can read and update student balance in the StudentCompleteActivity tx" 
+  participant: "org.bfore.Campaign"
+  operation: READ, UPDATE
+  resource: "org.bfore.Student" 
+  transaction: "org.bfore.StudentCompleteActivity" 
+  action: ALLOW
+}
+
+rule campaign_R7 {
+  description: "Campaigns can update their record in the StudentCompleteActivity tx"
+  participant(p): "org.bfore.Campaign"
+  operation: UPDATE
+  resource(r): "org.bfore.Campaign"
+  transaction(tx): "org.bfore.StudentCompleteActivity" 
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule campaign_R8 {
+  description: "Campaigns can read all the activities"
+  participant: "org.bfore.Campaign"
+  operation: READ
+  resource: "org.bfore.Activity"
+  action: ALLOW
+}
+
+rule campaign_R9 {
+  description: "Campaigns can update the activity contracts for their activities in the StudentCompleteActivity tx"
+  participant(p): "org.bfore.Campaign"
+  operation: UPDATE 
+  resource(r): "org.bfore.ActivityContract"
+  transaction(tx): "org.bfore.StudentCompleteActivity" 
+  condition: (p.getIdentifier() == r.activity.campaign.getIdentifier())
+  action: ALLOW
+}
+
+rule campaign_R10 {
+  description: "Campaign can read all the items" 
+  participant: "org.bfore.Campaign"
+  operation: READ
+  resource: "org.bfore.Item"
+  action: ALLOW
+}
+
+rule campaign_R11 {
+  description: "Campaign can update themselves in the AddActivityToCampaign tx" 
+  participant: "org.bfore.Campaign"
+  operation: UPDATE
+  resource: "org.bfore.Campaign"
+  transaction: "org.bfore.AddActivityToCampaign"
+  action: ALLOW
+}
+
 /**
 * DONOR'S RULES
 */
+// Donor: 7 rules 
 rule donor_R1 {
   description: "Donors can read their record only"
   participant(p): "org.bfore.Donor"
-  operation: READ, UPDATE
+  operation: READ
   resource(r): "org.bfore.Donor"
   condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW 
@@ -126,8 +259,7 @@ rule donor_R1 {
 rule donor_R2 { 
   description: "Donors can read all the campaigns"
   participant: "org.bfore.Donor"
-  operation: READ, UPDATE
-  // UPDATE is just because otherwise they cannot execute transaction FundCampaign
+  operation: READ
   resource: "org.bfore.Campaign"
   action: ALLOW
 }
@@ -141,33 +273,85 @@ rule donor_R3 {
 }
 
 rule donor_R4 {
-  description: "Donors can fund the campaign"
-  // TODO: remove the donor field from the transaction and use sender
+  description: "Donors can make the FundCampaign tx"
   participant: "org.bfore.Donor"
   operation: CREATE
   resource: "org.bfore.FundCampaign"
   action: ALLOW 
 }
 
+rule donor_R5 {
+  description: "Donors can  update their record in the FundCampaign tx"
+  participant(p): "org.bfore.Donor"
+  operation: UPDATE
+  resource(r): "org.bfore.Donor"
+  transaction(tx): "org.bfore.FundCampaign" 
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule donor_R6 { 
+  description: "Donors can update the campaigns in the FundCampaign tx"
+  participant: "org.bfore.Donor"
+  operation: READ
+  resource: "org.bfore.Campaign"
+  transaction: "org.bfore.FundCampaign"
+  action: ALLOW
+}
+
+rule donor_R7 { 
+  description: "Donors can read all the items"
+  participant: "org.bfore.Donor"
+  operation: READ
+  resource: "org.bfore.Item"
+  action: ALLOW
+}
+
+
 /**
 * VENDOR'S RULES
 */
-rule vendor_V1 {
+// Vendor: 5 Rules 
+rule vendor_R1 {
   description: "Vendor can read their record only"
   participant(p): "org.bfore.Vendor"
-  operation: READ, UPDATE
+  operation: READ
   resource(r): "org.bfore.Vendor"
   condition: (p.getIdentifier() == r.getIdentifier())
   action: ALLOW 
 }
 
-rule vendor_V2 {
+rule vendor_R2 {
   description: "Vendor can create items for which they are the owners"
   participant(p): "org.bfore.Vendor"
   operation: CREATE
   resource(r): "org.bfore.Item"
   condition: (p.getIdentifier() == r.owner.getIdentifier())
   action: ALLOW 
+}
+
+rule vendor_R3 {
+  description: "Vendor can read all the campaigns"
+  participant: "org.bfore.Vendor"
+  operation: READ
+  resource: "org.bfore.Campaign"
+  action: ALLOW
+}
+
+rule vendor_R4 {
+  description: "Vendor can read all the activities"
+  participant: "org.bfore.Vendor"
+  operation: READ
+  resource: "org.bfore.Activity"
+  action: ALLOW
+}
+
+rule vendor_R5 {
+  description: "Vendor can read all the items"
+  participant: "org.bfore.Vendor"
+  operation: READ
+  resource: "org.bfore.Item"
+  action: ALLOW
 }
 
 

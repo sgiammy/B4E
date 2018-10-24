@@ -55,11 +55,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserById(){
-    var words = this.currentUser.split(".");
-    var items = words[2].split("#"); 
+    var words = this.currentUser.split("#");
+    var items = words[0].split("."); 
 
-   this.participantId = items[1] + '.com';
-   this.participantType = items[0];  
+   this.participantId = words[1];
+   this.participantType = items[2];  
 
     this.api.getParticipantById(this.participantType, this.participantId)
       .then((details) => {

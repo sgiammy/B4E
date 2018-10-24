@@ -12,7 +12,7 @@
         <!-- Only completed campaigns must be shown -->
         <ng-container *ngFor="let campaign of campaigns">
           <div class="media d-block feature" *ngIf="campaign['completed']==true" >
-            <div  class="media-body">
+            <div class="media-body">
               <!-- firstName has to be changed with name -->
               <!-- and description has to be added-->
               <h3  class="mt-0">{{campaign['campaignName']}}</h3>
@@ -20,11 +20,12 @@
               <p >{{campaign['campaignDescription']}}</p>
               <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
               <!-- to be changed with if(donor)-->
-              <div *ngIf = "1==true">
+              <div *ngIf = "participantType=='Donor'">
                 <input type="submit" (click)="fundCampaign(campaign['firstName'], campaign['email'])" value="Fund it" class="btn btn-primary">
               </div>
             </div>
           </div>
+          
       </ng-container>
       </div>
     </section>

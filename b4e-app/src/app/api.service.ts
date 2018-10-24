@@ -167,11 +167,15 @@ export class ApiService {
     .toPromise();
   }
 
-  fundCampaign(campaignId, amount){
+  fundCampaign(campaignId, amount, donor){
+
+    var campaign = "resource:org.bfore.Campaign#" + campaignId; 
+
     return this.http.post('http://localhost:3000/api/'  + 'FundCampaign', {
       $class: NS + 'FundCampaign',
       educoinAmount: amount,
-      campaign: campaignId
+      campaign: campaign,
+      donor: donor
 
     }, {withCredentials: true})
     .toPromise(); 
@@ -215,6 +219,15 @@ export class ApiService {
      });
   }
 
+  getCampaignById(campaignId){
+    var url = "http://localhost:3000/api/Campaign/" + campaignId; 
+    return this.http.get(url, {withCredentials: true})
+      .toPromise()
+      .then((data) => {
+        return data;
+      });
+  }
+
   addActivityToCampaign(data){
     var url = "http://localhost:3000/api/AddActivityToCampaign"; 
     return this.http.post(url, {
@@ -222,9 +235,9 @@ export class ApiService {
       activityName: data['activityName'],
       activityDescription: data['activityDescription'],
       completeCampaign: data['completeCampaign'],
-      educoin: 0,
       bonusEducoin: data['bonusEducoin'],
       maxStudents: data['maxStudents'],
+      dueDate: data['dueDate'],
       assignments: data['assignments'],
       activityType: "LEARNING",
       
@@ -239,9 +252,6 @@ export class ApiService {
     var url = "http://localhost:3000/api/EnrollStudentToActivity"; 
     return this.http.post(url, {
       $class: NS + 'EnrollStudentToActivity',
-      dueDate: "2019-10-18T19:11:33.786Z",
-      earnedEducoin: 0,
-      winner: false,
       activity: activity
     }, {withCredentials: true})
     .toPromise(); 

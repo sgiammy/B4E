@@ -26,7 +26,7 @@ export class FundCampaignComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      amount: this.amount
+      amount: 0
   
     });
   }

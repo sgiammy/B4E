@@ -14,20 +14,39 @@ export class SmallbannerComponent implements OnInit {
 
   message:string;
   private login:string;
-  private isCampaign:string;
+  private isCampaign:string; 
+  private currentUser;
+  private participantType; 
 
   constructor(private data: DataService, 
     private api: ApiService,  
     private router: Router,
-    private cookieService: CookieService) { }
+    ) { }
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);
     this.data.currentIsCampaign.subscribe(isCampaign => this.isCampaign = isCampaign);
-    if (this.message === "true")
-      this.login = "Logout";
-    else
-      this.login = "Login";
+    
+    this.api.getCurrentUser()
+    .then((currentUser) => {
+      this.currentUser = currentUser; 
+      this.participantType = currentUser.split('#')[0].split('.')[2];
+      console.log(this.participantType);
+    });
+
+    this.api.checkWallet()
+    .then((results) => {
+      if(results['length']>0) {
+        console.log('Wallet > 0');
+        this.login = "Logout";
+        this.data.changeMessage("true");
+      }
+      else {
+        this.login = "Login";
+        this.data.changeMessage("false");
+      }
+    })
+   
   }
 
   registerLogout(){
@@ -46,8 +65,8 @@ export class SmallbannerComponent implements OnInit {
   }
 
   goToProfile(){
-    console.log(this.isCampaign);
-    if(this.isCampaign === "true")
+    
+    if(this.isCampaign === "true" || this.participantType == "Campaign")
       this.router.navigateByUrl('/campaignprofile');
     else
       this.router.navigateByUrl('/profile');

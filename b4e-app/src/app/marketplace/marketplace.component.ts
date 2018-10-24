@@ -14,8 +14,16 @@ export class MarketplaceComponent implements OnInit {
   constructor(private api: ApiService,
     private dialog: MatDialog) { }
   items:any = [];
+  private currentUser;
+  private participantType; 
 
   ngOnInit() {
+    this.api.getCurrentUser()
+    .then((currentUser) => {
+      this.currentUser = currentUser; 
+      this.participantType = currentUser.split('#')[0].split('.')[2];
+      console.log(this.participantType);
+    });
     this.getItems();
   }
 

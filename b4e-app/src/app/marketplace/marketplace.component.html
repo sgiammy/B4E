@@ -16,7 +16,7 @@
             <h6 class="mt-0">{{item['cost']}} EDC</h6>
             <p >{{item['description']}}</p>
             <!-- to be changed with if(student)-->
-            <div *ngIf = "1==true">
+            <div *ngIf = "participantType=='Student'">
               <input type="submit" (click)="buyItem(item['itemId']);" value="Buy it" class="btn btn-primary">
             </div>
           </div>

@@ -31,10 +31,14 @@ enum ActivityType {
 
 asset ActivityContract identified by activityContractId {
   o String activityContractId
-  o DateTime dueDate 
+  o Boolean completed default=false
+  o DateTime dueDate
+  o DateTime reviewDate optional
+  o DateTime submissionDate optional
   o Integer earnedEducoin default=0
   o Boolean winner default=false
   o Boolean[] completedAssignments optional
+  o String[] attachments optional 
   --> Activity activity
   --> Student student 
 }
@@ -54,8 +58,9 @@ concept Assignment{
 asset Activity identified by activityId {
   o String activityId
   o String activityName
+  o DateTime dueDate
   o String activityDescription optional
-  o ActivityType activityType
+  o ActivityType activityType optional
   o Integer educoin default = 0 // = to the sum of the educoin for each assignment
   o Integer bonusEducoin
   o Integer maxStudents
@@ -149,13 +154,13 @@ transaction FundCampaign{
 A student enroll to an Activity 
  */
 transaction EnrollStudentToActivity {
-  o DateTime dueDate
   --> Activity activity
 }
 
 transaction AddActivityToCampaign {
   o String activityName
-  o String activityDescription optional
+  o String activityDescription
+  o DateTime dueDate
   o Boolean completeCampaign
   o Integer bonusEducoin
   o Integer maxStudents
@@ -169,7 +174,11 @@ A student complete an activity
 transaction StudentCompleteActivity {
   -->ActivityContract activityContract 
   o Boolean[] completedAssignments 
-  o DateTime today
+}
+  
+transaction StudentSubmitActivity {
+ --> ActivityContract activityContract
+  o String[] attachments
 }
 
 /**

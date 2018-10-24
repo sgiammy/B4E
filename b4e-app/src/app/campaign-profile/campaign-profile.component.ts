@@ -55,11 +55,12 @@ export class CampaignProfileComponent implements OnInit {
   }
 
   getUserById(){
-    var words = this.currentUser.split(".");
-    var items = words[2].split("#"); 
+    console.log(this.currentUser);
+    var words = this.currentUser.split("#");
+    var items = words[0].split("."); 
 
-   this.participantId = items[1] + '.com';
-   this.participantType = items[0];  
+   this.participantId = words[1];
+   this.participantType = items[2];  
 
     this.api.getParticipantById(this.participantType, this.participantId)
       .then((details) => {
@@ -84,6 +85,8 @@ export class CampaignProfileComponent implements OnInit {
     newData['completeCampaign'] = data['completeCampaign']; 
     newData['maxStudents'] = data['maxStudents'];
     newData['bonusEducoin'] = data['bonusEducoin']; 
+    newData['dueDate'] = data['dueDate'];
+    // change date to datetime 
 
     var assignments = []
     for(var i=0; i<data['assignmentNames'].length; i++){

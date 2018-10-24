@@ -15,9 +15,18 @@ export class CampaignsComponent implements OnInit {
     private dialog: MatDialog) { }
 
   campaigns:any = [];
+  private currentUser;
+  private participantType; 
   private amount = 0; 
+  private dialogRef;
 
   ngOnInit() {
+     this.api.getCurrentUser()
+    .then((currentUser) => {
+      this.currentUser = currentUser; 
+      this.participantType = currentUser.split('#')[0].split('.')[2];
+      console.log(this.participantType);
+    });
     this.getCampaigns(); 
   }
 
@@ -35,22 +44,24 @@ export class CampaignsComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
       name: campaignName,
-      amount: 0
     };
   
-    const dialogRef =  this.dialog.open(FundCampaignComponent, dialogConfig); 
+   this.dialogRef =  this.dialog.open(FundCampaignComponent, dialogConfig); 
 
-    dialogRef.afterClosed().subscribe(
-      data => {
-        console.log("Dialog output: ", data);
-        this.amount = data.amount;
-      }
-    );
+  
 
   }
 
   fundCampaign(campaignName, campaignEmail){
     this.openDialog(campaignName);
-    this.api.fundCampaign(campaignEmail, this.amount);
-  }
+    this.dialogRef.afterClosed().subscribe(
+      data => {
+        console.log("Dialog output: ", data);
+        this.amount = data.amount;
+        console.log(this.amount);
+        this.api.fundCampaign(campaignEmail, this.amount, this.currentUser);
+      
+      });
+    }
+   
 }

@@ -15,13 +15,14 @@
               <p><strong>Description:</strong> {{activity['description']}}<br>
                  <strong>Maximum educoin:</strong> {{activity['educoin']}} EDC<br>
                 <strong>Bonus:</strong> {{activity['bonusEducoin']}} EDC<br>
-                <strong>Maximum students:</strong> {{activity['maxStudents']}}</p>
+                <strong>Maximum students:</strong> {{activity['maxStudents']}}<br>
+                <strong>Campaign:</strong> {{activity['campaignName']}}</p>
               <p *ngFor="let assignment of activity['assignments']">
                 <strong>{{assignment['name']}}</strong> <br>
                 {{assignment['description']}}<br>{{assignment['educoin']}} EDC
               </p>
               <!-- to be changed with if(student)-->
-              <div *ngIf = "1==true">
+              <div *ngIf = "participantType=='Student'">
                   <input type="submit" (click)="enrollStudent(activity['activityId'])" value="Enroll" class="btn btn-primary">
                 </div>
             </div>

@@ -35,9 +35,10 @@ export class CreateActivityComponent implements OnInit {
       completeCampaign: null,
       bonusEducoin: '',
       maxStudents: '',
+      dueDate: '',
       assignmentNames: '',
       assignmentDescriptions: '',
-      assignmentCosts: ''
+      assignmentCosts: '',
     });
   }
 
