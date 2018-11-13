@@ -1,18 +1,21 @@
 /**
  * New query file
  */
+/**
+ * New query file
+ */
 query Q1 {
-  description: "Given student and activity return the Activity Contract (if any)"
+  description: "Given student and mission return the Mission Contract (if any)"
   statement: 
-    SELECT org.bfore.ActivityContract
-      WHERE(_$activity == activity AND _$student == student)
+    SELECT org.bfore.MissionContract
+      WHERE(_$mission == mission AND _$student == student)
 }
 
 query Q2 {
-  description: "Given an activityID check if there is already a winner"
+  description: "Given a missionID check if there is already a winner"
   statement: 
-    SELECT org.bfore.ActivityContract
-      WHERE(_$activity == activity AND winner == true)
+    SELECT org.bfore.MissionContract
+      WHERE(_$mission == mission AND winner == true)
 }
 
 query Q3 {
@@ -24,9 +27,9 @@ query Q3 {
 
 
 query Q5 {
-  description: "Get the activities of a student"
+  description: "Get the missions of a student"
   statement:
-    SELECT org.bfore.ActivityContract
+    SELECT org.bfore.MissionContract
       WHERE(_$student == student) 
 
 }
@@ -46,8 +49,24 @@ query Q7 {
 }
 
 query Q8 {
- description: "Get all the activities of a given campaign"
+ description: "Get all the missions of a given campaign"
  statement:
-  SELECT org.bfore.Activity
+  SELECT org.bfore.Mission
     WHERE(_$campaign == campaign)
+}
+
+query Q9 {
+  description: "Get the mission contrats of a given mission"
+  statement:
+    SELECT org.bfore.MissionContract
+      WHERE(_$mission == mission) 
+
+}
+
+query Q10 {
+  description: "Get the missions of a mentor"
+  statement:
+    SELECT org.bfore.MissionContract
+      WHERE(_$mentor == mentor) 
+
 }

@@ -26,7 +26,7 @@ export class SmallbannerComponent implements OnInit {
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);
     this.data.currentIsCampaign.subscribe(isCampaign => this.isCampaign = isCampaign);
-    
+    //console.log(this.router.url);
     this.api.getCurrentUser()
     .then((currentUser) => {
       this.currentUser = currentUser; 
@@ -45,7 +45,13 @@ export class SmallbannerComponent implements OnInit {
         this.login = "Login";
         this.data.changeMessage("false");
       }
-    })
+    });
+    if(this.login == undefined){
+      if(this.message == "true")
+        this.login = "Logout";
+      else
+        this.login = "Login";
+    }
    
   }
 

@@ -15,7 +15,10 @@
               <a class="nav-link" routerLink="/campaigns" routerLinkActive="nav-link active">Campaigns</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/activities" routerLinkActive="nav-link active">Activities</a>
+              <a class="nav-link" routerLink="/missions" routerLinkActive="nav-link active">Missions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/mentors" routerLinkActive="nav-link active">Mentors</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" routerLink="/marketplace" routerLinkActive="nav-link active">Market Place</a>
@@ -39,6 +42,18 @@
   </header>
   <!-- END header -->
   <section class="site-hero overlay" data-stellar-background-ratio="0.5" style="background-image: url(assets/big_image_1.jpg);">
-
+    <div class="container">
+        <div class="row align-items-center  justify-content-center">
+          <div class="col-md-8 text-center">
+    
+            <div class="mb-5" *ngIf="router.url=='/profile' || router.url=='/campaignprofile'">
+              <br><br><br><br><br><br><br><br>
+              <h1>{{participantType}} Profile</h1>
+            </div>
+    
+            
+          </div>
+        </div>
+      </div>
   </section>
   <!-- END section -->

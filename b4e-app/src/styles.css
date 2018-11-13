@@ -4,6 +4,7 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,900); 
 
 
+
 body {
   background: #fff;
   font-family: "Roboto", arial, sans-serif;
@@ -18,6 +19,7 @@ a {
   -o-transition: .3s all ease;
   transition: .3s all ease;
   text-decoration: none;
+  color: rgb(179, 45, 45);
 }
 
 a:hover {

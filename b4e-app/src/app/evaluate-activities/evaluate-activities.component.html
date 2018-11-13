@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row justify-content-center">
+     
+      <div class="col-md-12 box">
+          <h3 align="center">Evaluate activities</h3>
+          <p>Check the activities that the student has completed.</p>
+          <form [formGroup]="form">
+            <div class="col-md-8 form-group">
+                <label formArrayName="completedActivities" *ngFor="let activity of form.controls.completedActivities.controls; let i = index">
+                  <input type="checkbox" [formControlName]="i">
+                  {{activities[i]['name']}}
+                  <ul>
+                    <li>{{activities[i]['description']}} </li>
+                    <li>{{activities[i]['educoin']}} EDC</li>
+                  </ul>
+                  <br>
+                 
+                  </label>
+            </div>
+
+            <div class="col-md-12 form-group">
+                  
+                  <button class="btn btn-primary"
+                          (click)="close()" >
+                      Back
+                  </button>
+                  <button class="btn btn-primary"
+                          (click)="save()"  style="float: right;">
+                      Save
+                  </button>
+                  
+            </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+

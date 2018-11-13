@@ -1,0 +1,38 @@
+<app-smallbanner></app-smallbanner>
+<!-- MISSIONS section -->
+
+<br><br><br>
+<div class="row align-items-center site-hero-inner justify-content-center text-dark">
+    <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Our Missions</h1>
+</div>
+<section class="site-section">
+    <div class="container">
+      <section class="school-features text-dark  " >
+        <div class="inner"  >
+            <ng-container *ngFor="let mission of missions">
+              <div *ngIf="mission['funded']==true" class="media d-block feature" >
+            
+                <div class="media-body">
+                  <h3>{{mission['missionName']}} </h3>
+                  <p><strong>Description:</strong> {{mission['missionDescription']}}<br>
+                    <strong>Maximum educoin:</strong> {{mission['educoin']}} EDC<br>
+                    <strong>Bonus:</strong> {{mission['bonusEducoin']}} EDC<br>
+                    <strong>Maximum students:</strong> {{mission['maxStudents']}}<br>
+                    <strong>Campaign:</strong> {{mission['campaignName']}}</p>
+                  <p *ngFor="let activity of mission['activities']">
+                    <strong>{{activity['name']}}</strong> <br>
+                    {{activity['description']}}<br>{{activity['educoin']}} EDC
+                  </p>
+                  <div>
+                    <input [disabled]="participantType!='Student'" type="submit" (click)="enrollStudent(mission['missionId'])" value="Enroll" class="btn btn-primary">
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- END section -->
+  <app-footer></app-footer>

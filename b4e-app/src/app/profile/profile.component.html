@@ -1,55 +1,171 @@
 <app-smallbanner></app-smallbanner>
 
 <br><br>
-<div class="row align-items-center site-hero-inner justify-content-center">
-   
+<div class="row align-items-center site-hero-inner justify-content-center text-dark">
   <h1>{{details['firstName']}} {{details['lastName']}}</h1>
- 
+</div>
+<div class="row align-items-center site-hero-inner justify-content-center text-dark">
+  <p style="font-size:20px"><strong>Balance: </strong>{{details['educoinBalance']}} EDC</p>
 </div>
 
-<div class="row align-items-center site-hero-inner justify-content-center">
-        <h5>Balance: {{details['educoinBalance']}} EDC</h5>
-</div>
-
-<!-- ACTIVITIES -->
-<section *ngIf="details['$class'] == 'org.bfore.Student'" class="site-section">
-    <div class="container">
-      <section class="school-features text-dark d-flex" >
-        <h4>Your activities</h4>
-        <!-- Q5 Add query get ActivityContract by studentId-->
-        <div class="inner"  >
-          <div *ngFor="let activity of activities" class="media d-block feature" >
-            <div class="icon"><span class="flaticon-video-call"></span></div>
-            <div class="media-body">
-              <h3  class="mt-0">{{activity['activity']}} </h3>
-              <p><strong>Due date:</strong> {{activity['dueDate']}}</p>
-              <p><strong>Earned educoin:</strong> {{activity['earnedEducoin']}} EDC</p>
-              <p><strong>Bonus educoin:</strong> {{activity['bonusEducoin']}}</p>
-              <p *ngFor="let assignment of activity['completedAssignments']">
-                <strong>assignment['name']</strong> <br>
-                assignment['description'] -- assignment['educoin'] EDC
-              </p>
+<!-- MISSIONS CONTRACTS  -->
+<div class="container" *ngIf="details['$class'] == 'org.bfore.Student'" >
+  <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Contracts</h1>
+  <section class="school-features text-dark " >
+    <div class="inner"  >
+      <div *ngFor="let missionContract of missionContracts" class="media d-block feature" >
+        <div class="media-body">
+          <h3>{{missionContract['missionName']}}</h3>
+          <p>
+            <strong>Due date:</strong> {{missionContract['date']}}<br>
+            <strong>Submission date:</strong> {{missionContract['submissionDate'].split('T')[0]}}<br>
+            <strong>Earned educoin:</strong> {{missionContract['earnedEducoin']}} EDC
+          </p>
+          <p><strong>Attachments:</strong>
+            <body *ngFor="let filename of missionContract['filenames']; let i=index">
+              <strong><u>
+                <a style="color:#007bff" (click)="download( filename, missionContract['attachments'][i])">{{filename}}</a>
+              </u></strong>
+            </body>
+          </p>
+          <div class="align-items-center justify-content-center text-dark">
+            <div>
+              <input [disabled]="missionContract['mentorSubmissionDate'] && missionContract['submissionDate']" id="file-field" name="file-field" type="file" accept=".png,.jpg,.jpeg">
+              <br>
+            </div>
+            <div>
+              <br>
+              <button [disabled]="missionContract['mentorSubmissionDate']" type="submit" 
+              (click)="askForMentor(missionContract['missionContractId'])" 
+              value="Ask for mentor" class="btn btn-primary">Request mentor</button>
+            </div>
+            <div>
+              <br>
+              <input [disabled]="missionContract['submissionDate']" type="submit" 
+              (click)="submitMission(missionContract['missionContractId'])" value="Deliver mission" class="btn btn-primary">
+            </div> 
+            <div>
+              <br>
+              <input [disabled]="missionContract['mentorUsed']==false" type="submit" 
+              (click)="leaveReview(missionContract['missionContractId'])" value="Leave a review" class="btn btn-primary">
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
-</section>
+  </section>
+</div>
+
+
+
+<!-- IF DONOR -->
+<div class="container" *ngIf="details['$class'] == 'org.bfore.Donor'" >
+  <br>
+  <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Campaigns you funded</h1>
+  <br>
+  <ng-container *ngFor="let campaign of fundedCampaigns" class="text-dark">
+    <p><strong>Campaign name: </strong>{{campaign['campaignName']}}<br>
+      <strong>Your contribution:</strong> {{campaign['educoinAmount']}} EDC
+    </p>
+    <h5 style="color:#007bff; font-family: 'Monoton', cursive;">Missions</h5>
+    <section class="school-features text-dark">
+      <div class="inner"  >
+        <ng-container *ngFor="let mission of campaign['missions']">
+          <div class="media d-block feature">
+            <div  class="media-body">
+              <h3>{{mission['missionName']}}</h3>
+              <p>
+                <strong>Description: </strong>{{mission['missionDescription']}}<br>
+                <strong>Due date: </strong>{{mission['dueDate'].split('T')[0]}}<br>
+                <strong>Max Students: </strong>{{mission['maxStudents']}}<br>
+                <strong>Current Students: </strong>{{mission['currentStudents']}}<br>
+                <strong>Mentor Fare:</strong> {{mission['mentorFare']}} EDC
+              </p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </section>
+    <br><br>
+    <h5 style="color:#007bff; font-family: 'Monoton', cursive;">Contracts</h5>
+    <section class="school-features text-dark">
+      <div class="inner"  >
+        <ng-container *ngFor="let mission of campaign['missions']">
+          <ng-container *ngFor="let contract of mission['contracts']">
+            <div class="media d-block feature">
+              <div  class="media-body">
+                <p>
+                  <strong>Mission: </strong>{{mission['missionName']}}<br>
+                  <strong>Student:</strong> {{contract['student'].split('#')[1]}}<br>
+                  <strong>Earned educoin: </strong>{{contract['earnedEducoin']}} EDC
+                </p>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </section>
+  </ng-container>
+</div>
+
+
+
+<!-- IF MENTOR Contracts -->
+<div class="container" *ngIf="details['$class'] == 'org.bfore.Mentor'" >
+  <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Contracts</h1>
+  <section class="school-features text-dark " >
+    <div class="inner"  >
+      <div *ngFor="let missionContract of missionContracts" class="media d-block feature" >
+        <div class="media-body">
+          <h3>{{missionContract['missionName']}}</h3>
+          <p>
+            <strong>Due date:</strong> {{missionContract['date']}}<br>
+            <strong>Submission date:</strong> {{missionContract['submissionDate'].split('T')[0]}}<br>
+            <strong>Earned educoin:</strong> {{missionContract['earnedEducoin']}} EDC
+          </p>
+          <p><strong>Attachments:</strong>
+            <body *ngFor="let filename of missionContract['filenames']; let i=index">
+              <strong><u>
+                <a style="color:#007bff" (click)="download( filename, missionContract['attachments'][i])">{{filename}}</a>
+              </u></strong>
+            </body>
+          </p>
+          <div class="align-items-center justify-content-center text-dark">
+            <div>
+              <input [disabled]="missionContract['mentorUsed']==true" id="file-field" name="file-field" type="file" accept=".png,.jpg,.jpeg">
+              <br>
+            </div>
+            <div>
+              <br>
+              <input [disabled]="missionContract['mentorUsed']==true" type="submit" 
+              (click)="mentorReview(missionContract['missionContractId'])" value="Review" class="btn btn-primary">
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
 
 <!-- ITEMS -->
-<section *ngIf="details['$class'] == 'org.bfore.Student' || details['$class'] == 'org.bfore.Vendor'" class="site-section">
+<section *ngIf="details['$class'] == 'org.bfore.Student' || 
+    details['$class'] == 'org.bfore.Vendor' ||
+    details['$class'] == 'org.bfore.Mentor' " class="site-section">
     <div class="container">
-      <section class="school-features text-dark d-flex" >
-        <h4>Your items</h4>
+      <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Items</h1>
+        <section class="school-features text-dark" >
         <!-- Q6 Add query get items by ownerId-->
           <div class="inner"  >
             <ng-container *ngFor="let item of items">
               <!-- Show the items owned by the student or the vendor -->
               <div class="media d-block feature" >
                 <div  class="media-body">
-                  <h3  class="mt-0">{{item['name']}} </h3>
-                  <h6 class="mt-0">{{item['cost']}} EDC</h6>
-                  <p >{{item['description']}}</p>
+                  <h3>{{item['name']}}</h3>
+                  <p>
+                    <strong>Cost:</strong> {{item['cost']}} EDC<br>
+                    <strong>Description:</strong> {{item['description']}}<br>
+                  </p>
                 </div>
               </div>
             </ng-container>
@@ -57,29 +173,5 @@
     </section>
   </div>
 </section>
-
-<!-- IF DONOR -->
-<section *ngIf="details['$class'] == 'org.bfore.Donor'" class="site-section">
-    <div class="container">
-      <section class="school-features text-dark d-flex" >
-        <h4>Your campaigns</h4>
-        <!-- Q7 Add query get "FundCampaign" transactionb by donor -->
-        <div class="inner"  >
-          <!-- Only completed campaigns must be shown -->
-          <ng-container *ngFor="let campaign of campaigns">
-            <div class="media d-block feature">
-              <div  class="media-body">
-                <h3  class="mt-0">{{campaign['campaignName']}}</h3>
-                <p><strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC</p>
-                <p >{{campaign['campaignDescription']}}</p>
-                <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
-              </div>
-            </div>
-        </ng-container>
-        </div>
-    </section>
-  </div>
-</section>
-
 
 <app-footer></app-footer>

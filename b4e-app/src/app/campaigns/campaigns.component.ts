@@ -45,22 +45,27 @@ export class CampaignsComponent implements OnInit {
     dialogConfig.data = {
       name: campaignName,
     };
-  
+   
    this.dialogRef =  this.dialog.open(FundCampaignComponent, dialogConfig); 
 
   
 
   }
 
-  fundCampaign(campaignName, campaignEmail){
+  fundCampaign(campaignName, campaignEmail, fundingGoal, balance){
     this.openDialog(campaignName);
     this.dialogRef.afterClosed().subscribe(
       data => {
         console.log("Dialog output: ", data);
-        this.amount = data.amount;
+        if(data.amount > fundingGoal - balance)
+          this.amount = fundingGoal-balance ; 
+        else
+          this.amount = data.amount;
         console.log(this.amount);
-        this.api.fundCampaign(campaignEmail, this.amount, this.currentUser);
-      
+        this.api.fundCampaign(campaignEmail, this.amount, this.currentUser)
+          .then(() => {
+            window.location.reload();
+          });
       });
     }
    

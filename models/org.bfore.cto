@@ -20,52 +20,53 @@
 namespace org.bfore
 
 
-/**
-* The type of activities that students or mentors can do
-*/ 
-enum ActivityType {
-  o LEARNING
-  o TEACHING
-}
-
-
-asset ActivityContract identified by activityContractId {
-  o String activityContractId
+asset MissionContract identified by missionContractId {
+  o String missionContractId
   o Boolean completed default=false
+  o Boolean mentorUsed default=false 
   o DateTime dueDate
   o DateTime reviewDate optional
+  o DateTime mentorSubmissionDate optional
   o DateTime submissionDate optional
   o Integer earnedEducoin default=0
   o Boolean winner default=false
-  o Boolean[] completedAssignments optional
+  o Boolean[] completedActivities optional
+  o String[] filenames optional
   o String[] attachments optional 
-  --> Activity activity
-  --> Student student 
+  --> Mission mission
+  --> Student student
+  --> Mentor mentor optional
 }
 
 /**
 * The assignments to be completed inside an activity
  */
-concept Assignment{
+concept Activity{
   o String name
   o String description 
   o Integer educoin default = 0 
 }
 
+concept Review {
+  o String title
+  o String description
+  o Double score
+}
+  
 /**
 * An activity to be complete from mentors/students to earn EduCoin
 */
-asset Activity identified by activityId {
-  o String activityId
-  o String activityName
+asset Mission identified by missionId {
+  o String missionId
+  o String missionName
   o DateTime dueDate
-  o String activityDescription optional
-  o ActivityType activityType optional
+  o String missionDescription optional
   o Integer educoin default = 0 // = to the sum of the educoin for each assignment
   o Integer bonusEducoin
   o Integer maxStudents
+  o Integer mentorFare
   o Integer currentStudents default=0 
-  o Assignment[] assignments  
+  o Activity[] activities  
   --> Campaign campaign
 }
 
@@ -113,6 +114,9 @@ participant Student extends Business {
 * A mentor is a type of participant in the network
 */
 participant Mentor extends Business {
+  o Double reviewSum default=0.0 optional
+  o Double reviewCount default=0.0 optional
+  o Review[] reviews optional
 }
 
 /**
@@ -146,6 +150,7 @@ A donor can give Educoin to a campaign (funding)
 */
 transaction FundCampaign{
   o Integer educoinAmount
+  o Integer realAmount optional
   --> Campaign campaign
   --> Donor donor
 }
@@ -153,32 +158,51 @@ transaction FundCampaign{
 /**
 A student enroll to an Activity 
  */
-transaction EnrollStudentToActivity {
-  --> Activity activity
+transaction EnrollStudentToMission {
+  --> Mission mission
 }
 
-transaction AddActivityToCampaign {
-  o String activityName
-  o String activityDescription
+transaction AddMissionToCampaign {
+  o String missionName
+  o String missionDescription
   o DateTime dueDate
   o Boolean completeCampaign
   o Integer bonusEducoin
   o Integer maxStudents
-  o ActivityType activityType
-  o Assignment[] assignments  
+  o Integer mentorFare 
+  o Activity[] activities 
 }
 
 /**
 A student complete an activity 
  */
-transaction StudentCompleteActivity {
-  -->ActivityContract activityContract 
-  o Boolean[] completedAssignments 
+transaction StudentCompleteMission {
+  -->MissionContract missionContract 
+  o Boolean[] completedActivities
 }
   
-transaction StudentSubmitActivity {
- --> ActivityContract activityContract
+transaction StudentSubmitMission {
+ --> MissionContract missionContract
   o String[] attachments
+  o String[] filenames
+}
+  
+transaction StudentAskForMentor {
+ --> MissionContract missionContract
+  o String[] attachments
+  o String[] filenames
+ --> Mentor mentor
+}
+  
+transaction MentorReview {
+  --> MissionContract missionContract
+  o String[] attachments
+  o String[] filenames
+}
+
+transaction StudentLeaveReview {
+  --> MissionContract missionContract
+  o Review review
 }
 
 /**

@@ -9,11 +9,10 @@ import { HomeComponent} from './home/home.component';
 import { BannerComponent } from './banner/banner.component';
 import { FooterComponent } from './footer/footer.component';
 import { CampaignsComponent} from './campaigns/campaigns.component';
-import { ActivitiesComponent} from './activities/activities.component';
+import { MissionsComponent} from './missions/missions.component';
 import { AboutComponent } from './about/about.component';
 import { SmallbannerComponent } from './smallbanner/smallbanner.component';
 import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CookieService } from 'ngx-cookie-service';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
@@ -23,19 +22,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule} from '@angular/material/button';
 import { BuyItemComponent } from './buy-item/buy-item.component';
 import { CampaignProfileComponent } from './campaign-profile/campaign-profile.component';
-import { CreateActivityComponent } from './create-activity/create-activity.component';
+import { CreateMissionComponent } from './create-mission/create-mission.component';
+import { EvaluateActivitiesComponent } from './evaluate-activities/evaluate-activities.component';
+import { MentorsComponent } from './mentors/mentors.component';
+import { AskformentorComponent } from './askformentor/askformentor.component';
+import { LeaveReviewComponent } from './leave-review/leave-review.component';
+import { ErrorComponent } from './error/error.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
   {path: 'campaigns', component: CampaignsComponent },
-  {path: 'activities', component: ActivitiesComponent },
+  {path: 'missions', component: MissionsComponent },
   {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'login', component: LoginComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'marketplace', component: MarketplaceComponent },
-  {path: 'campaignprofile', component: CampaignProfileComponent }
+  {path: 'campaignprofile', component: CampaignProfileComponent },
+  {path: 'mentors', component: MentorsComponent }
 ]; 
 
 @NgModule({
@@ -45,17 +49,21 @@ const routes: Routes = [
     BannerComponent,
     FooterComponent,
     CampaignsComponent,
-    ActivitiesComponent,
+    MissionsComponent,
     AboutComponent,
     SmallbannerComponent,
     RegisterComponent,
-    LoginComponent,
     ProfileComponent,
     MarketplaceComponent,
     FundCampaignComponent,
     BuyItemComponent,
     CampaignProfileComponent,
-    CreateActivityComponent
+    CreateMissionComponent,
+    EvaluateActivitiesComponent,
+    MentorsComponent,
+    AskformentorComponent,
+    LeaveReviewComponent,
+    ErrorComponent
   ],
   imports: [
     [RouterModule.forRoot(routes)],
@@ -72,6 +80,8 @@ const routes: Routes = [
   providers: [ApiService, CookieService,
     ],
   bootstrap: [AppComponent],
-  entryComponents: [FundCampaignComponent, BuyItemComponent, CreateActivityComponent]
+  entryComponents: [FundCampaignComponent, BuyItemComponent,
+     CreateMissionComponent, EvaluateActivitiesComponent,
+     AskformentorComponent, LeaveReviewComponent, ErrorComponent]
 })
 export class AppModule { }

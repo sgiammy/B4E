@@ -1,0 +1,25 @@
+COMPOSER_CARD=admin@b4e-network
+COMPOSER_NAMESPACES=never
+COMPOSER_AUTHENTICATION=false
+COMPOSER_MULTIUSER=false
+COMPOSER_PROVIDERS='{
+    "google": {
+           "provider": "google",
+           "module": "passport-google-oauth2",
+           "clientID": "4626139684-jc70cj9f8nl49n6jtfresqkmst2nfouv.apps.googleusercontent.com",
+           "clientSecret": "5IQKO88YZGiwUeuXFJUu4sYB",
+           "authPath": "/auth/google",
+           "callbackURL": "/auth/google/callback",
+           "scope": "https://www.googleapis.com/auth/plus.login",
+           "successRedirect": "http://localhost:4201/register?authenticated=true",
+           "failureRedirect": "/"
+
+       }
+}'
+COMPOSER_DATASOURCES='{
+    "db": {
+        "name": "db",
+        "connector": "mongodb",
+        "host": "mongo"
+    }
+}'

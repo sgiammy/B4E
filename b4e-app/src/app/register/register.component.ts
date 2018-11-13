@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
     participant: new FormControl()
   }); 
 
-  participants = ['Donor','Student','Vendor'];
+  participants = ['Donor','Student','Mentor','Vendor'];
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message);

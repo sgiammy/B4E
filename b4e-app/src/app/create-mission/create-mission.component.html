@@ -1,18 +1,18 @@
-<div *ngIf="step==0" class="container">
+<div *ngIf="step==0"  class="container">
     <div class="row justify-content-center">
         <div class="col-md-5 box">
            
-                <p>Enter activity details</p>
+                <p>Enter mission details</p>
                 <form [formGroup]="form">
                     <div class="row">
                         <div class="col-md-8 form-group">
-                            <input class="form-control"  formControlName="activityName" placeholder="Name" >
+                            <input class="form-control"  formControlName="missionName" placeholder="Name" >
                         </div>
                         <div class="col-md-8 form-group">
-                            <textarea class="form-control"  formControlName="activityDescription" placeholder="Enter description..."></textarea>
+                            <textarea class="form-control"  formControlName="missionDescription" placeholder="Enter description..."></textarea>
                         </div>
                         <div class="col-md-8 form-group">
-                            <label>Is that the last activity of this campaign?</label><br>
+                            <label>Is that the last mission of this campaign?</label><br>
                             <input type="radio" formControlName="completeCampaign" [value]="true" ><label> Yes</label><br>
                         
                             <input type="radio" formControlName="completeCampaign" [value]="false" ><label> No</label>
@@ -22,6 +22,9 @@
                         </div>
                         <div class="col-md-8 form-group">
                             <input class="form-control"  formControlName="maxStudents" placeholder="Max students" >
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <input class="form-control"  formControlName="mentorFare" placeholder="Mentor fare" >
                         </div>
                         <div class="col-md-8 form-group">
                             <input class="form-control" type="date" formControlName="dueDate" placeholder="Due date" >
@@ -43,21 +46,22 @@
     </div>
 </div>
 
+
 <div *ngIf="step==1" class="container">
         <div class="row justify-content-center">
             <div class="col-md-12 box">
                
-                    <p>Add activity assignments</p>
+                    <p>Add activities</p>
                     <form [formGroup]="form">
                         <div *ngFor='let in of counter(numAss) ;let i = index' class="row">
                             <div class="col-md-3 form-group">
-                                <input class="form-control"  formControlName="assignmentNames" placeholder="Name" >
+                                <input class="form-control"  formControlName="activityNames" placeholder="Name" >
                             </div>
                             <div class="col-md-3 form-group">
-                                <input class="form-control"  formControlName="assignmentDescriptions" placeholder="Enter description...">
+                                <input class="form-control"  formControlName="activityDescriptions" placeholder="Enter description...">
                             </div>
                             <div class="col-md-3 form-group">
-                                <input class="form-control"  formControlName="assignmentCosts" placeholder="Educoin" >
+                                <input class="form-control"  formControlName="activityCosts" placeholder="Educoin" >
                             </div>
                         </div>
                         <div class="row">

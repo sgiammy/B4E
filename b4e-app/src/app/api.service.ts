@@ -31,7 +31,13 @@ export class ApiService {
 }
 
   getCampaigns(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/' + 'Campaign', {withCredentials: true}).pipe(
+    return this.http.get('http://localhost:3001/api/' + 'Campaign').pipe(
+      map(this.extractData)
+    );
+  }
+
+  getMentors(): Observable<any> {
+    return this.http.get('http://localhost:3001/api/' + 'Mentor').pipe(
       map(this.extractData)
     );
   }
@@ -39,23 +45,27 @@ export class ApiService {
   // Must be changed with a query bc we only want items 
   // whose owner is a vendor, and not a student!
   getItems(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/'  + 'Item', {withCredentials: true}).pipe(
+    return this.http.get('http://localhost:3001/api/'  + 'Item').pipe(
       map(this.extractData)
     );
   }
 
-  getActivities(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/'  + 'Activity', {withCredentials: true}).pipe(
+  getMissions(): Observable<any> {
+    return this.http.get('http://localhost:3001/api/'  + 'Mission').pipe(
       map(this.extractData)
     );
   } 
 
   postUser(data) { 
+    var amount = 0; 
+    if(data['participant']=='Donor')
+      amount = 100; 
     return this.http.post(API_URL + data['participant'] , {
       $class: NS + data['participant'],
       email: data['email'],
       firstName: data['firstName'],
-      lastName: data['lastName']
+      lastName: data['lastName'],
+      educoinBalance: amount
     }).toPromise()
     .then(() => {
       const identity = {
@@ -160,9 +170,10 @@ export class ApiService {
   }
 
   buyItem(itemId){
+    var item = "resource:org.bfore.Item#" + itemId; 
     return this.http.post('http://localhost:3000/api/' + 'BuyItem' , {
       $class: NS + 'BuyItem',
-      item: itemId
+      item: item
     }, {withCredentials: true})
     .toPromise();
   }
@@ -181,8 +192,8 @@ export class ApiService {
     .toPromise(); 
   }
 
-  getActivityContractByStudent(studentId){
-    var url = "http://localhost:3000/api/queries/Q5/" + studentId;
+  getMissionContractByStudent(studentId){
+    var url = "http://localhost:3000/api/queries/Q5?student=resource%3Aorg.bfore.Student%23" + studentId;
     return this.http.get(url, {withCredentials: true}
       ).toPromise()
      .then((data) => { 
@@ -190,8 +201,8 @@ export class ApiService {
      });
   }
 
-  getItemsByOwnerId(ownerId){
-    var url = "http://localhost:3000/api/queries/Q6/" + ownerId;
+  getItemsByOwnerId(participantType, ownerId){
+    var url = "http://localhost:3000/api/queries/Q6?owner=resource%3Aorg.bfore." + participantType + "%23" + ownerId;
     return this.http.get(url, {withCredentials: true}
       ).toPromise()
      .then((data) => { 
@@ -200,7 +211,7 @@ export class ApiService {
   }
 
   getFundCampaignByDonor(donorId){
-    var url = "http://localhost:3000/api/queries/Q7/" + donorId;
+    var url = "http://localhost:3000/api/queries/Q7?donor=resource%3Aorg.bfore.Donor%23" + donorId;
     return this.http.get(url, {withCredentials: true}
       ).toPromise()
      .then((data) => { 
@@ -210,7 +221,7 @@ export class ApiService {
 
 
 
-  getActivitiesByCampaign(campaignId){
+  getMissionsByCampaign(campaignId){
     var url = "http://localhost:3000/api/queries/Q8?campaign=resource%3Aorg.bfore.Campaign%23" + campaignId; 
     return this.http.get(url, {withCredentials: true}
       ).toPromise()
@@ -228,33 +239,176 @@ export class ApiService {
       });
   }
 
-  addActivityToCampaign(data){
-    var url = "http://localhost:3000/api/AddActivityToCampaign"; 
+  addMissionToCampaign(data){
+    var url = "http://localhost:3000/api/AddMissionToCampaign"; 
     return this.http.post(url, {
-      $class: NS + 'AddActivityToCampaign',
-      activityName: data['activityName'],
-      activityDescription: data['activityDescription'],
+      $class: NS + 'AddMissionToCampaign',
+      missionName: data['missionName'],
+      missionDescription: data['missionDescription'],
       completeCampaign: data['completeCampaign'],
       bonusEducoin: data['bonusEducoin'],
       maxStudents: data['maxStudents'],
+      mentorFare: data['mentorFare'],
       dueDate: data['dueDate'],
-      assignments: data['assignments'],
-      activityType: "LEARNING",
+      activities: data['activities'],
       
 
     }, {withCredentials: true})
     .toPromise(); 
   }
 
-  enrollStudentToActivity(activityId){
-    var activity = "resource:org.bfore.Activity#" + activityId ; 
+  enrollStudentToMission(missionId){
+    var mission = "resource:org.bfore.Mission#" + missionId ; 
 
-    var url = "http://localhost:3000/api/EnrollStudentToActivity"; 
+    var url = "http://localhost:3000/api/EnrollStudentToMission"; 
     return this.http.post(url, {
-      $class: NS + 'EnrollStudentToActivity',
-      activity: activity
+      $class: NS + 'EnrollStudentToMission',
+      mission: mission
     }, {withCredentials: true})
     .toPromise(); 
   }
+
+  getMissionDetails(missionId){
+    var url = "http://localhost:3000/api/Mission/" + missionId; 
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data;
+     });
+  }
+
+  submitMission(missionContractId, file){
+   
+    var promise = this.getBase64(file);
+    var a = this; 
+   
+    promise.then((result) => {
+      console.log(result);
+      var url = "http://localhost:3000/api/StudentSubmitMission"; 
+      var missionContract = "resource:org.bfore.MissionContract#" + missionContractId ; 
+      a.http.post(url, {
+        $class: NS + 'StudentSubmitMission',
+        missionContract: missionContract,
+        filenames: [file['name']],
+        attachments: [result]
+      }, {withCredentials: true}).toPromise().then(() => {
+        window.location.reload();
+      })
+      
+      
+    })
+   
+   
+  }
+
+  getContractsByMission(missionId){
+    var url = "http://localhost:3000/api/queries/Q9?mission=resource%3Aorg.bfore.Mission%23" + missionId; 
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
+  }
+
+  evaluateMission(missionContractId, data){
+    var missionContract = "resource:org.bfore.MissionContract#" + missionContractId ; 
+
+    var url = "http://localhost:3000/api/StudentCompleteMission"; 
+    return this.http.post(url, {
+      $class: NS + 'StudentCompleteMission',
+      missionContract: missionContract,
+      completedActivities: data
+    }, {withCredentials: true})
+    .toPromise(); 
+  }
+
+  getMissionContractByMentor(mentorId){
+    var url = "http://localhost:3000/api/queries/Q10?mentor=resource%3Aorg.bfore.Mentor%23" + mentorId;
+    return this.http.get(url, {withCredentials: true}
+      ).toPromise()
+     .then((data) => { 
+       return data; 
+     });
+  }
+
+  mentorReview(missionContractId, file){
+    var missionContract = "resource:org.bfore.MissionContract#" + missionContractId ; 
+    var promise = this.getBase64(file);
+    var a = this; 
+    promise.then((result) => {
+      //console.log(result);
+      var url = "http://localhost:3000/api/MentorReview"; 
+    
+      a.http.post(url, {
+        $class: NS + 'MentorReview',
+        missionContract: missionContract,
+        filenames: [file['name']],
+        attachments: [result]
+      }, {withCredentials: true}).toPromise().then(() => {
+        window.location.reload();
+      })
+      
+      
+    })
+   
+   
+  }
+
+  askForMentor(missionContractId, mentorId, file){
+    var missionContract = "resource:org.bfore.MissionContract#" + missionContractId ;
+    var mentor =  "resource:org.bfore.Mentor#" + mentorId ;
+
+    var promise = this.getBase64(file);
+    var a = this; 
+   
+    promise.then((result) => {
+      //console.log(result);
+      var url = "http://localhost:3000/api/StudentAskForMentor"; 
+    
+      a.http.post(url, {
+        $class: NS + 'StudentAskForMentor',
+        missionContract: missionContract,
+        filenames: [file['name']],
+        attachments: [result],
+        mentor: mentor
+      }, {withCredentials: true}).toPromise().then(() => {
+        window.location.reload();
+      })
+      
+      
+    })
+  }
+   
+  
+
+  leaveReview(missionContractId, data){
+    var missionContract = "resource:org.bfore.MissionContract#" + missionContractId ;
+    var url = "http://localhost:3000/api/StudentLeaveReview"; 
+    return this.http.post(url, {
+      $class: NS + 'StudentLeaveReview',
+      missionContract: missionContract,
+      review: {"$class": "org.bfore.Review",
+                "title": data['title'],
+                "description": data['description'],
+                "score": data['score']}
+     
+    }, {withCredentials: true})
+    .toPromise(); 
+  }
+
+  getBase64(file, onLoadCallback) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+    
+    
+ }
+ 
+}
+ 
 
 }

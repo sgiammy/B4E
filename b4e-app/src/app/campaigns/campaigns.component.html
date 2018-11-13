@@ -1,13 +1,13 @@
 <app-smallbanner></app-smallbanner>
 <!-- CAMPAIGN section -->
-
+<br><br><br>
 <div class="row align-items-center site-hero-inner justify-content-center">
-    <h1><br><br>Our Campaigns</h1>
+  <h1 style="color:#007bff; font-family: 'Monoton', cursive;">Our Campaigns</h1>
 </div>
 
 <section class="site-section">
   <div class="container">
-    <section class="school-features text-dark d-flex" >
+    <section class="school-features text-dark" >
       <div class="inner"  >
         <!-- Only completed campaigns must be shown -->
         <ng-container *ngFor="let campaign of campaigns">
@@ -15,13 +15,17 @@
             <div class="media-body">
               <!-- firstName has to be changed with name -->
               <!-- and description has to be added-->
-              <h3  class="mt-0">{{campaign['campaignName']}}</h3>
-              <p><strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC</p>
-              <p >{{campaign['campaignDescription']}}</p>
-              <p><strong>Balance:</strong> {{campaign['educoinBalance']}} EDC</p>
-              <!-- to be changed with if(donor)-->
-              <div *ngIf = "participantType=='Donor'">
-                <input type="submit" (click)="fundCampaign(campaign['firstName'], campaign['email'])" value="Fund it" class="btn btn-primary">
+              <h3>{{campaign['campaignName']}}</h3>
+              <p>
+                <strong>Funding goal:</strong> {{campaign['fundingGoal']}} EDC<br>
+                <strong>Description: </strong>{{campaign['campaignDescription']}}<br>
+                <strong>Balance:</strong> {{campaign['educoinBalance']}} EDC
+              </p>
+              <div>
+                <input [disabled]="participantType!=Donor || campaign['funded']==true" type="submit" (click)="fundCampaign(campaign['campaignName'], campaign['email'], campaign['fundingGoal'], campaign['educoinBalance'])" value="Fund it" class="btn btn-primary">
+              </div>
+              <div *ngIf="campaign['funded']==true">
+                <img src="../../assets/funded.png" alt="funded">
               </div>
             </div>
           </div>

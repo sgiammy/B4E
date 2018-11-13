@@ -44,7 +44,10 @@ export class MarketplaceComponent implements OnInit {
   }
 
   buyItem(itemId){ 
-    this.api.buyItem(itemId);
+    console.log(itemId);
+    this.api.buyItem(itemId).then(() => {
+      window.location.reload();
+    })
     this.openDialog(); 
   }
 
