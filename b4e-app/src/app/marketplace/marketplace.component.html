@@ -19,7 +19,7 @@
               <strong>Description: </strong>{{item['description']}}
             </p>
             <div>
-              <input [disabled]="participantType!='Student'" type="submit" (click)="buyItem(item['itemId']);" value="Buy it" class="btn btn-primary">
+              <input [disabled]="participantType!='Student' && participantType!='Mentor'" type="submit" (click)="buyItem(item['itemId']);" value="Buy it" class="btn btn-primary">
             </div>
           </div>
         </div>

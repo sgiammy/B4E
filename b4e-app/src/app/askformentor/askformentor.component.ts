@@ -35,7 +35,7 @@ export class AskformentorComponent implements OnInit {
   }
 
   close(){
-    console.log()
+  
     this.dialogRef.close(); 
   }
 

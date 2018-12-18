@@ -30,7 +30,7 @@
           </p>
           <div class="align-items-center justify-content-center text-dark">
             <div>
-              <input [disabled]="missionContract['mentorSubmissionDate'] && missionContract['submissionDate']" id="file-field" name="file-field" type="file" accept=".png,.jpg,.jpeg">
+              <input [disabled]="missionContract['mentorSubmissionDate'] && missionContract['submissionDate']" id="file-field" name="file-field" type="file" accept=".txt, .png,.jpg,.jpeg">
               <br>
             </div>
             <div>
@@ -46,7 +46,7 @@
             </div> 
             <div>
               <br>
-              <input [disabled]="missionContract['mentorUsed']==false" type="submit" 
+              <input *ngIf="missionContract['mentorUsed']==true" type="submit" 
               (click)="leaveReview(missionContract['missionContractId'])" value="Leave a review" class="btn btn-primary">
             </div>
           </div>
@@ -132,7 +132,7 @@
           </p>
           <div class="align-items-center justify-content-center text-dark">
             <div>
-              <input [disabled]="missionContract['mentorUsed']==true" id="file-field" name="file-field" type="file" accept=".png,.jpg,.jpeg">
+              <input [disabled]="missionContract['mentorUsed']==true" id="file-field" name="file-field" type="file" accept=".txt, .png,.jpg,.jpeg">
               <br>
             </div>
             <div>

@@ -1,7 +1,3 @@
-/**
-* LET'S START WITH STUDENT ACCESS CONTROL 
-*/
-
 // Students: 20 rules 
 rule student_R1 {
   description: "Students can read their record only"
@@ -71,13 +67,6 @@ rule student_R8 {
   action: ALLOW
 }
 
-rule student_R9 {
-  description: "Students can make the EnrollStudentToMission transaction" 
-  participant: "org.bfore.Student"
-  operation: CREATE
-  resource: "org.bfore.EnrollStudentToMission"
-  action: ALLOW
-}
 
 rule student_R10 {
  description: "Student can make a StudentSubmitMission transaction" 
@@ -198,12 +187,13 @@ rule campaign_R2 {
   participant(p): "org.bfore.Campaign"
   operation: CREATE
   resource(r): "org.bfore.Mission"
+  transaction: "org.bfore.AddMissionToCampaign"
   condition: (p.getIdentifier() == r.campaign.getIdentifier()) 
   action: ALLOW
 }
 
 rule campaign_R3 {
-  description: "Campaigns can read all the mission contracts for their activities"
+  description: "Campaigns can read all the mission contracts for their missions"
   participant(p): "org.bfore.Campaign"
   operation: READ 
   resource(r): "org.bfore.MissionContract"
@@ -399,14 +389,7 @@ rule mentor_R6 {
   resource: "org.bfore.MissionContract"
   action: ALLOW
 }
-rule mentor_R7 {
-  description: "Mentor can read its own record" 
-  participant(p): "org.bfore.Mentor"
-  operation: READ
-  resource(r): "org.bfore.Mentor"
-  condition: (p.getIdentifier() == r.getIdentifier())
-  action: ALLOW
-}
+
 rule mentor_R8 {
   description: "Mentor can update Campaign Balance in the MentorReview tx" 
   participant: "org.bfore.Mentor"
@@ -479,6 +462,7 @@ rule vendor_R2 {
   participant(p): "org.bfore.Vendor"
   operation: CREATE
   resource(r): "org.bfore.Item"
+  transaction: "org.bfore.AddItem"
   condition: (p.getIdentifier() == r.owner.getIdentifier())
   action: ALLOW 
 }

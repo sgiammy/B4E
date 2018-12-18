@@ -28,6 +28,7 @@ import { MentorsComponent } from './mentors/mentors.component';
 import { AskformentorComponent } from './askformentor/askformentor.component';
 import { LeaveReviewComponent } from './leave-review/leave-review.component';
 import { ErrorComponent } from './error/error.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -68,6 +69,7 @@ const routes: Routes = [
   imports: [
     [RouterModule.forRoot(routes)],
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     MatDialogModule,

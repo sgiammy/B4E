@@ -19,7 +19,6 @@
 
 namespace org.bfore
 
-
 asset MissionContract identified by missionContractId {
   o String missionContractId
   o Boolean completed default=false
@@ -39,7 +38,7 @@ asset MissionContract identified by missionContractId {
 }
 
 /**
-* The assignments to be completed inside an activity
+* The activities to be completed inside a mission
  */
 concept Activity{
   o String name
@@ -54,7 +53,7 @@ concept Review {
 }
   
 /**
-* An activity to be complete from mentors/students to earn EduCoin
+* A mission to be complete from students to earn EduCoin
 */
 asset Mission identified by missionId {
   o String missionId
@@ -133,7 +132,6 @@ participant Vendor extends Business {
 
 /**
 A campaign is also a participant, since it can transfer and own educoins.
-For now is like a business, but may be changed later
  */
 participant Campaign extends Business {
   o String campaignName
@@ -156,7 +154,7 @@ transaction FundCampaign{
 }
 
 /**
-A student enroll to an Activity 
+A student enroll to  Mission 
  */
 transaction EnrollStudentToMission {
   --> Mission mission
@@ -174,7 +172,7 @@ transaction AddMissionToCampaign {
 }
 
 /**
-A student complete an activity 
+A student complete a mission 
  */
 transaction StudentCompleteMission {
   -->MissionContract missionContract 

@@ -22,7 +22,7 @@
                 <strong>Balance:</strong> {{campaign['educoinBalance']}} EDC
               </p>
               <div>
-                <input [disabled]="participantType!=Donor || campaign['funded']==true" type="submit" (click)="fundCampaign(campaign['campaignName'], campaign['email'], campaign['fundingGoal'], campaign['educoinBalance'])" value="Fund it" class="btn btn-primary">
+                <input [disabled]="participantType==undefined || participantType!='Donor' || campaign['funded']==true" type="submit" (click)="fundCampaign(campaign['campaignName'], campaign['email'], campaign['fundingGoal'], campaign['educoinBalance'])" value="Fund it" class="btn btn-primary">
               </div>
               <div *ngIf="campaign['funded']==true">
                 <img src="../../assets/funded.png" alt="funded">

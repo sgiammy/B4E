@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   private dialogRef2; 
   private reviewRef; 
   private missions;
+  private errorRef; 
 
 
   constructor(private api: ApiService,
@@ -63,13 +64,16 @@ export class ProfileComponent implements OnInit {
         if(this.participantType == "Student"){
           this.api.getMissionContractByStudent(this.participantId).then((missionContracts) => {
             this.missionContracts = missionContracts; 
+            console.log(this.missionContracts);
             for(var i = 0; i< this.missionContracts.length; i++ ){
               console.log(this.missionContracts[i]['dueDate']);
               this.missionContracts[i]['date'] = this.missionContracts[i]['dueDate'].slice(0,10); 
               this.api.getMissionDetails(this.missionContracts[i]['mission'].split('#')[1]).then((details) => {
-                this.saveDetails(details); 
+                this.saveDetails(details);
+                console.log(this.missionContracts); 
               });
             }
+
           });
         }
         if(this.participantType == "Student" || this.participantType == "Vendor"){
@@ -124,7 +128,7 @@ export class ProfileComponent implements OnInit {
   mentorReview(missionContractId){
     var file = document.querySelector('#file-field').files[0];
     if(file == undefined){
-      this.openDialog2('Please upload at least one file.');
+      this.openError('Please upload at least one file.');
     }
     else {
       this.api.mentorReview(missionContractId,file);
@@ -132,6 +136,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private openDialog() {
+    this.missionContracts = []; 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true; 
     dialogConfig.autoFocus = true;
@@ -145,11 +150,16 @@ export class ProfileComponent implements OnInit {
   }
 
   askForMentor(missionContractId){
+    
+    
     var file = document.querySelector('#file-field').files[0];
-    console.log(file['name']);
+    console.log(file);
     
     if(file == undefined){
-      this.openDialog2('Please upload at least one file.');
+      this.openError('Please upload at least one file.');
+      this.errorRef.afterClosed().subscribe(data => {
+        window.location.reload(); 
+      });
     }
     else {
       this.openDialog();
@@ -159,7 +169,7 @@ export class ProfileComponent implements OnInit {
           this.api.askForMentor(missionContractId, data['mentorId'], file);
           window.location.reload();
         });
-    }
+    } 
     
    
   }
@@ -190,7 +200,10 @@ export class ProfileComponent implements OnInit {
     var file = document.querySelector('#file-field').files[0];
     
     if(file == undefined){
-      this.openDialog2('Please upload at least one file.');
+      this.openError('Please upload at least one file.');
+      this.errorRef.afterClosed().subscribe(data => {
+        window.location.reload(); 
+      });
     }
     else {
       this.api.submitMission(missionContractId, file);
@@ -231,18 +244,19 @@ export class ProfileComponent implements OnInit {
       }
     }
   }
-
-  private openDialog2(error) {
+  private openError(error) {
+    this.missionContracts = []; 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true; 
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
-      error: error,
-    };   
+      error: error 
+    };
    
-   this.dialogRef2 =  this.dialog.open(ErrorComponent, dialogConfig); 
+   this.errorRef =  this.dialog.open(ErrorComponent, dialogConfig); 
 
   }
+
 
   download(filename, file){
     console.log(filename);
