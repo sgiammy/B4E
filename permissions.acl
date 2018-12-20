@@ -491,7 +491,6 @@ rule vendor_R5 {
   action: ALLOW
 }
 
-
 rule SystemACL {
     description:  "System ACL to permit all access"
     participant: "org.hyperledger.composer.system.Participant"
@@ -500,11 +499,21 @@ rule SystemACL {
     action: ALLOW
 }
 
-rule NetworkAdminUser {
+rule rule1 {
     description: "Grant business network administrators full access to user resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: CREATE, READ
+    resource: "org.bfore.Business"
+    action: ALLOW
+}
+
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant(p): "org.hyperledger.composer.system.NetworkAdmin"
     operation: ALL
-    resource: "**"
+    resource(r): "**"
+    condition: (p.getIdentifier() != "admin")
     action: ALLOW
 }
 
